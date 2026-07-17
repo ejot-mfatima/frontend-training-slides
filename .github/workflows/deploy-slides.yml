@@ -26,15 +26,17 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Serve slides and export PDF
-        run: |
-          npx --yes serve@14 . --listen 8000 &
-          sleep 5
-          npx --yes decktape reveal http://localhost:8000/slides.html slides.pdf \
-            --size 1920x1080 \
-            --pause 400 \
-            --chrome-arg=--no-sandbox \
-            --chrome-arg=--disable-setuid-sandbox
+      - name: Install puppeteer
+        run: npm install puppeteer
+
+      - name: Serve slides locally
+        run: npx --yes serve@14 . --listen 8000 &
+
+      - name: Wait for server to be ready
+        run: sleep 5
+
+      - name: Generate PDF via print-pdf mode
+        run: node generate-pdf.js
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
