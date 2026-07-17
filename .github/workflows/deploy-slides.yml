@@ -15,6 +15,34 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  generate-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Serve slides and export PDF
+        run: |
+          npx --yes serve@14 . --listen 8000 &
+          sleep 5
+          npx --yes decktape reveal http://localhost:8000/slides.html slides.pdf \
+            --size 1920x1080 \
+            --pause 400 \
+            --chrome-arg=--no-sandbox \
+            --chrome-arg=--disable-setuid-sandbox
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-kickstart-slides
+          path: slides.pdf
+          retention-days: 90
+
   deploy:
     runs-on: ubuntu-latest
     environment:
@@ -30,7 +58,7 @@ jobs:
       - name: Upload slides folder
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'   # deploys the entire repo root (index.html + slides.html)
+          path: '.'
 
       - name: Deploy to GitHub Pages
         id: deployment
