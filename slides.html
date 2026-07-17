@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frontend Kickstart — Getting Started with Frontend</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/night.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css" />
+  <style>
+    :root {
+      --accent: #61dafb;
+      --accent2: #f7df1e;
+      --muted: #aaa;
+    }
+    .reveal h1, .reveal h2, .reveal h3 { color: var(--accent); }
+    .reveal .day-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #1a1a2e;
+      font-weight: 700;
+      font-size: 0.85em;
+      border-radius: 20px;
+      padding: 4px 16px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+    .reveal .tag {
+      display: inline-block;
+      background: #333;
+      color: var(--accent);
+      border-radius: 6px;
+      padding: 2px 10px;
+      font-size: 0.7em;
+      margin: 2px;
+      border: 1px solid var(--accent);
+    }
+    .reveal .muted { color: var(--muted); font-size: 0.85em; }
+    .reveal .highlight { color: var(--accent2); font-weight: bold; }
+    .reveal .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(97,218,251,0.3);
+      border-radius: 10px;
+      padding: 16px 24px;
+      margin: 8px 0;
+    }
+    .reveal .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      text-align: left;
+    }
+    .reveal .analogy {
+      background: rgba(247,223,30,0.08);
+      border-left: 4px solid var(--accent2);
+      padding: 10px 18px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.85em;
+      margin-top: 12px;
+    }
+    .reveal .analogy::before { content: "💡 Backend analogy: "; color: var(--accent2); font-weight: bold; }
+    .reveal ul { list-style: none; padding: 0; }
+    .reveal ul li::before { content: "▸ "; color: var(--accent); }
+    .reveal .goal {
+      background: rgba(97,218,251,0.07);
+      border: 1px dashed var(--accent);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 0.85em;
+      margin: 10px 0 20px;
+      color: #ccc;
+    }
+    .reveal .goal::before { content: "🎯 Goal: "; color: var(--accent); font-weight: bold; }
+    .reveal section.title-slide h1 { font-size: 2em; }
+    .reveal .day-intro h2 { font-size: 1.8em; }
+    code.inline { background: #333; padding: 1px 6px; border-radius: 4px; color: var(--accent2); font-size: 0.85em; }
+    .reveal .challenge-badge {
+      display: inline-block;
+      background: var(--accent2);
+      color: #1a1a2e;
+      font-weight: 700;
+      font-size: 0.85em;
+      border-radius: 20px;
+      padding: 4px 16px;
+      margin-bottom: 14px;
+      letter-spacing: 1px;
+    }
+    .reveal .challenge-tip {
+      background: rgba(255,255,255,0.04);
+      border: 1px dashed rgba(97,218,251,0.35);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.78em;
+      color: #aaa;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ===================== TITLE ===================== -->
+<section class="title-slide" data-background-gradient="linear-gradient(135deg, #0f0c29, #302b63, #24243e)">
+  <h1>Frontend Kickstart</h1>
+  <p style="color:var(--accent); font-size:1.1em; margin-top:8px; letter-spacing:1px;">Getting Started with Frontend Development</p>
+  <p style="color:#aaa; margin-top:16px;">7-day learning path — 1 hour per session</p>
+  <div style="margin-top:30px;">
+    <span class="tag">JavaScript</span>
+    <span class="tag">DOM</span>
+    <span class="tag">ES6+</span>
+    <span class="tag">React</span>
+    <span class="tag">TypeScript</span>
+    <span class="tag">Tailwind</span>
+    <span class="tag">React Query</span>
+    <span class="tag">Zustand</span>
+  </div>
+  <p class="muted" style="margin-top:40px; font-style:italic;">"Start with the basics. Build from there."</p>
+</section>
+
+<!-- ===================== OVERVIEW ===================== -->
+<section>
+  <h2>7-Day Learning Path</h2>
+  <div class="two-col" style="text-align:left;">
+    <div>
+      <div class="card">📅 <strong>Day 1</strong> — JavaScript Fundamentals</div>
+      <div class="card">📅 <strong>Day 2</strong> — The Browser &amp; the DOM</div>
+      <div class="card">📅 <strong>Day 3</strong> — Modern JS &amp; ES6+ Patterns</div>
+      <div class="card">📅 <strong>Day 4</strong> — React Core Concepts</div>
+    </div>
+    <div>
+      <div class="card">📅 <strong>Day 5</strong> — React Data Flow &amp; Real-World Patterns</div>
+      <div class="card">📅 <strong>Day 6</strong> — TypeScript + Tailwind CSS</div>
+      <div class="card">📅 <strong>Day 7</strong> — React Router + React Query + Zustand</div>
+    </div>
+  </div>
+  <p class="muted" style="margin-top:16px;">Each session: concept slides → live demo → 🎯 challenge</p>
+</section>
+
+<!-- ===================== DAY 1 INTRO ===================== -->
+<section class="day-intro" data-background-gradient="linear-gradient(135deg, #1a1a2e, #16213e)">
+  <div class="day-badge">DAY 1</div>
+  <h2>JavaScript Fundamentals</h2>
+  <div class="goal">Understand JS as a language, not just "scripting"</div>
+  <div style="text-align:left;">
+    <ul>
+      <li>What is JS? Where does it run?</li>
+      <li>Variables: <code class="inline">var</code> / <code class="inline">let</code> / <code class="inline">const</code></li>
+      <li>Data types, functions, arrow functions</li>
+      <li>Arrays &amp; objects</li>
+      <li><code class="inline">map</code>, <code class="inline">filter</code>, <code class="inline">reduce</code></li>
+      <li>Async: callbacks → Promises → <code class="inline">async/await</code></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h3>What is JavaScript?</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">JS runs in two places</p>
+      <ul>
+        <li><strong>Browser</strong> — manipulates UI, handles user events</li>
+        <li><strong>Node.js</strong> — server-side, scripts, build tools</li>
+      </ul>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Key facts</p>
+      <ul>
+        <li>Interpreted, not compiled</li>
+        <li>Single-threaded + event loop</li>
+        <li>Dynamically typed</li>
+      </ul>
+    </div>
+  </div>
+  <div class="analogy">Think of Node.js like your Go/Java backend. The browser JS is the "client SDK" of your app.</div>
+</section>
+
+<section>
+  <h3>Variables &amp; Types</h3>
+  <pre><code class="language-javascript" data-trim>
+// Avoid var — it has weird scoping
+var old = "don't use"
+
+// let — can be reassigned
+let count = 0
+count = 1
+
+// const — can't be reassigned (prefer this by default)
+const name = "EJOT"
+
+// Types: string, number, boolean, null, undefined, object, array
+const user = { name: "Alice", age: 30 }
+const roles = ["admin", "viewer"]
+  </code></pre>
+  <div class="analogy">
+    <code class="inline">const</code> ≈ <code class="inline">final</code> in Java / immutable in Go (for the binding, not the value)
+  </div>
+</section>
+
+<section>
+  <h3>Functions &amp; Arrow Functions</h3>
+  <pre><code class="language-javascript" data-trim>
+// Classic function
+function greet(name) {
+  return `Hello, ${name}!`
+}
+
+// Arrow function (modern, preferred)
+const greet = (name) => `Hello, ${name}!`
+
+// Arrow with body
+const add = (a, b) => {
+  const result = a + b
+  return result
+}
+
+console.log(greet("Backend Dev")) // Hello, Backend Dev!
+  </code></pre>
+</section>
+
+<section>
+  <h3>Array Methods You'll See Everywhere</h3>
+  <pre><code class="language-javascript" data-trim>
+const users = [
+  { name: "Alice", active: true  },
+  { name: "Bob",   active: false },
+  { name: "Carol", active: true  },
+]
+
+// map — transform each item (returns new array)
+const names = users.map(u => u.name)
+// ["Alice", "Bob", "Carol"]
+
+// filter — keep items matching condition
+const active = users.filter(u => u.active)
+// [{ name: "Alice" }, { name: "Carol" }]
+
+// reduce — collapse to single value
+const count = users.reduce((acc, u) => acc + (u.active ? 1 : 0), 0)
+// 2
+  </code></pre>
+  <div class="analogy">These are like <code class="inline">SELECT</code>, <code class="inline">WHERE</code>, and aggregations in SQL.</div>
+</section>
+
+<section>
+  <h3>Async / Await</h3>
+  <pre><code class="language-javascript" data-trim>
+// Callbacks (old, avoid)
+fetchUser(id, function(err, user) { ... })
+
+// Promises (intermediate)
+fetchUser(id)
+  .then(user => console.log(user))
+  .catch(err => console.error(err))
+
+// async/await (modern, readable)
+async function loadUser(id) {
+  try {
+    const response = await fetch(`/api/users/${id}`)
+    const user = await response.json()
+    console.log(user)
+  } catch (err) {
+    console.error("Failed:", err)
+  }
+}
+  </code></pre>
+  <div class="analogy">Same concept as goroutines/channels or async handlers in Go — don't block the thread.</div>
+</section>
+
+<section data-background-color="#0d1117">
+  <h3>Day 1 — Live Demo</h3>
+  <div class="card" style="text-align:left;">
+    <p style="color:var(--accent); font-weight:bold;">Exercise: Fetch &amp; Display API Data</p>
+    <pre><code class="language-javascript" data-trim>
+async function getUsers() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/users")
+  const users = await res.json()
+
+  const names = users
+    .filter(u => u.id <= 5)
+    .map(u => u.name)
+
+  names.forEach(name => console.log(name))
+}
+
+getUsers()
+    </code></pre>
+  </div>
+  <p class="muted">Run this in the browser DevTools console (F12)</p>
+</section>
+
+<!-- ===================== DAY 1 CHALLENGE ===================== -->
+<section data-background-color="#0a0a0a">
+  <div class="challenge-badge">🧠 DAY 1 — PREDICT THE OUTPUT</div>
+  <h3>What Does This Print?</h3>
+  <p class="muted">Look at each snippet — predict the output before discussing.</p>
+  <div class="two-col">
+    <div>
+      <pre><code class="language-javascript" data-trim>
+// Snippet A
+const nums = [1, 2, 3, 4, 5]
+const result = nums
+  .filter(n =&gt; n % 2 === 0)
+  .map(n =&gt; n * 10)
+console.log(result)
+      </code></pre>
+      <pre><code class="language-javascript" data-trim>
+// Snippet B
+const [a, , b] = [10, 20, 30]
+console.log(a, b)
+      </code></pre>
+    </div>
+    <div>
+      <pre><code class="language-javascript" data-trim>
+// Snippet C — what order?
+async function run() {
+  console.log("A")
+  await Promise.resolve()
+  console.log("B")
+}
+run()
+console.log("C")
+      </code></pre>
+      <div class="analogy" style="margin-top:14px;">Discuss: Why does async change the order? What would you expect from a synchronous function?</div>
+    </div>
+  </div>
+  <div class="challenge-tip">💬 Answers: A) [20, 40] &nbsp; B) 10 30 &nbsp; C) A → C → B</div>
+</section>
+
+<!-- ===================== DAY 2 INTRO ===================== -->
+<section class="day-intro" data-background-gradient="linear-gradient(135deg, #1a1a2e, #16213e)">
+  <div class="day-badge">DAY 2</div>
+  <h2>The Browser &amp; the DOM</h2>
+  <div class="goal">Understand how JS talks to the UI</div>
+  <div style="text-align:left;">
+    <ul>
+      <li>What is the DOM?</li>
+      <li>How HTML / CSS / JS work together</li>
+      <li>Selecting elements &amp; handling events</li>
+      <li>How browsers render pages (brief)</li>
+      <li>What is a build tool? (Vite overview)</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h3>HTML / CSS / JS — Three Layers</h3>
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <p style="color:var(--accent); margin:0;"><strong>HTML</strong></p>
+        <p style="font-size:0.8em; margin:6px 0 0;">Structure — the skeleton</p>
+      </div>
+      <div class="card">
+        <p style="color:#ff6b9d; margin:0;"><strong>CSS</strong></p>
+        <p style="font-size:0.8em; margin:6px 0 0;">Style — the skin</p>
+      </div>
+      <div class="card">
+        <p style="color:var(--accent2); margin:0;"><strong>JavaScript</strong></p>
+        <p style="font-size:0.8em; margin:6px 0 0;">Behaviour — the muscles</p>
+      </div>
+    </div>
+    <div>
+      <pre><code class="language-html" data-trim>
+&lt;button id="btn"&gt;Click me&lt;/button&gt;
+
+&lt;style&gt;
+  button { color: blue; }
+&lt;/style&gt;
+
+&lt;script&gt;
+  document.getElementById("btn")
+    .addEventListener("click", () => {
+      alert("Clicked!")
+    })
+&lt;/script&gt;
+      </code></pre>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>What is the DOM?</h3>
+  <p>The browser parses HTML and creates a <strong class="highlight">tree of objects</strong> — the Document Object Model.</p>
+  <pre><code class="language-html" data-trim>
+&lt;div id="app"&gt;
+  &lt;h1&gt;Hello&lt;/h1&gt;
+  &lt;p&gt;World&lt;/p&gt;
+&lt;/div&gt;
+  </code></pre>
+  <pre><code class="language-javascript" data-trim>
+// Select elements
+const heading = document.querySelector("h1")
+const app     = document.getElementById("app")
+
+// Modify them
+heading.textContent = "Updated!"
+app.style.background = "lightblue"
+
+// Create new elements
+const btn = document.createElement("button")
+btn.textContent = "New Button"
+app.appendChild(btn)
+  </code></pre>
+  <div class="analogy">The DOM is like an in-memory JSON tree that represents the page.</div>
+</section>
+
+<section>
+  <h3>Event Handling</h3>
+  <pre><code class="language-javascript" data-trim>
+const btn = document.querySelector("#submit-btn")
+
+btn.addEventListener("click", (event) => {
+  event.preventDefault() // stop form from submitting
+  console.log("Button clicked!", event.target)
+})
+
+// Common events
+// click, submit, keydown, keyup, change, input, focus, blur
+  </code></pre>
+  <div class="analogy">Like HTTP middleware or webhook handlers — "when X happens, run Y".</div>
+</section>
+
+<section>
+  <h3>How Browsers Render Pages</h3>
+  <div style="text-align: left;">
+    <div class="card">1. <strong>Parse HTML</strong> → build DOM tree</div>
+    <div class="card">2. <strong>Parse CSS</strong> → build CSSOM</div>
+    <div class="card">3. <strong>Combine</strong> → Render tree</div>
+    <div class="card">4. <strong>Layout</strong> → calculate positions</div>
+    <div class="card">5. <strong>Paint</strong> → pixels on screen</div>
+  </div>
+  <p class="muted" style="margin-top:16px;">Why it matters: changing the DOM triggers re-layout. This is why React batches DOM updates.</p>
+</section>
+
+<section>
+  <h3>What is a Build Tool?</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:var(--accent)">Problem</p>
+      <ul>
+        <li>100+ JS files</li>
+        <li>Need to bundle them</li>
+        <li>Transpile modern JS for old browsers</li>
+        <li>Optimize images, CSS</li>
+        <li>Hot reload in dev</li>
+      </ul>
+    </div>
+    <div>
+      <p style="color:var(--accent)">Solution: <strong>Vite</strong></p>
+      <pre><code class="language-bash" data-trim>
+# Start dev server
+npm run dev
+
+# Build for production
+npm run build
+
+# Output: dist/
+# ├── index.html
+# ├── assets/
+# │   ├── main.abc123.js
+# │   └── main.def456.css
+      </code></pre>
+    </div>
+  </div>
+  <div class="analogy">Vite is like your <code class="inline">go build</code> + hot reload + bundler in one.</div>
+</section>
+
+<!-- ===================== DAY 2 CHALLENGE ===================== -->
+<section data-background-color="#0a0a0a">
+  <div class="challenge-badge">🎯 DAY 2 — PICK THE RIGHT TOOL</div>
+  <h3>Which DOM Method or Event?</h3>
+  <p class="muted">Match each scenario to the correct answer — discuss as a group.</p>
+  <div style="text-align:left;">
+    <div class="card">
+      1. You want to <strong>find</strong> <code class="inline">&lt;div id="app"&gt;</code> in the page<br/>
+      <span style="color:#555; font-size:0.8em;">→ document.<code class="inline">___________</code>("app")</span>
+    </div>
+    <div class="card">
+      2. The user is <strong>typing</strong> in an <code class="inline">&lt;input&gt;</code> — you want live updates<br/>
+      <span style="color:#555; font-size:0.8em;">→ use the <code class="inline">"___________"</code> event, not <code class="inline">"change"</code></span>
+    </div>
+    <div class="card">
+      3. You want to <strong>add</strong> a new <code class="inline">&lt;li&gt;</code> to an existing <code class="inline">&lt;ul&gt;</code><br/>
+      <span style="color:#555; font-size:0.8em;">→ ul.<code class="inline">___________</code>( newLi )</span>
+    </div>
+    <div class="card">
+      4. You want to <strong>stop a form</strong> from refreshing the page on submit<br/>
+      <span style="color:#555; font-size:0.8em;">→ event.<code class="inline">___________</code>()</span>
+    </div>
+  </div>
+  <div class="challenge-tip">💬 Answers: getElementById &nbsp;··· "input" &nbsp;··· appendChild &nbsp;··· preventDefault</div>
+</section>
+
+<!-- ===================== DAY 3 INTRO ===================== -->
+<section class="day-intro" data-background-gradient="linear-gradient(135deg, #1a1a2e, #16213e)">
+  <div class="day-badge">DAY 3</div>
+  <h2>Modern JS &amp; ES6+ Patterns</h2>
+  <div class="goal">Read modern frontend code confidently</div>
+  <div style="text-align:left;">
+    <ul>
+      <li>Destructuring</li>
+      <li>Spread / rest operators</li>
+      <li>Template literals</li>
+      <li>Modules: <code class="inline">import</code> / <code class="inline">export</code></li>
+      <li>Closures &amp; scope</li>
+      <li><code class="inline">this</code> keyword — just enough</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h3>Destructuring</h3>
+  <pre><code class="language-javascript" data-trim>
+// Object destructuring
+const user = { name: "Alice", age: 30, role: "admin" }
+
+const { name, role } = user
+console.log(name) // "Alice"
+
+// With rename
+const { name: userName } = user
+
+// Default value
+const { theme = "light" } = user
+
+// Array destructuring
+const [first, second, ...rest] = [1, 2, 3, 4, 5]
+console.log(first) // 1
+console.log(rest)  // [3, 4, 5]
+  </code></pre>
+  <div class="analogy">Like unpacking a struct in Go or pattern matching in Rust.</div>
+</section>
+
+<section>
+  <h3>Spread &amp; Rest</h3>
+  <pre><code class="language-javascript" data-trim>
+// Spread — expand an array/object
+const defaults = { theme: "light", lang: "en" }
+const userPrefs = { lang: "de", fontSize: 14 }
+
+const config = { ...defaults, ...userPrefs }
+// { theme: "light", lang: "de", fontSize: 14 }
+
+// Spread array
+const a = [1, 2, 3]
+const b = [...a, 4, 5]  // [1, 2, 3, 4, 5]
+
+// Rest — collect remaining args
+function log(first, ...others) {
+  console.log(first)  // "hello"
+  console.log(others) // ["world", "!"]
+}
+log("hello", "world", "!")
+  </code></pre>
+</section>
+
+<section>
+  <h3>Modules: import / export</h3>
+  <pre><code class="language-javascript" data-trim>
+// utils.js — named exports
+export const PI = 3.14
+export function double(n) { return n * 2 }
+
+// api.js — default export
+export default class ApiClient { ... }
+
+// main.js — importing
+import ApiClient from "./api.js"
+import { PI, double } from "./utils.js"
+
+// Import everything
+import * as utils from "./utils.js"
+utils.double(5) // 10
+  </code></pre>
+  <div class="analogy">Same concept as Go packages / Java imports — each file is its own module/namespace.</div>
+</section>
+
+<section>
+  <h3>Closures &amp; Scope</h3>
+  <pre><code class="language-javascript" data-trim>
+// A closure "closes over" outer variables
+function makeCounter() {
+  let count = 0          // private to makeCounter
+
+  return {
+    increment: () => ++count,
+    decrement: () => --count,
+    value:     () => count,
+  }
+}
+
+const counter = makeCounter()
+counter.increment() // 1
+counter.increment() // 2
+counter.value()     // 2
+  </code></pre>
+  <p class="muted">You'll see this pattern inside React hooks constantly.</p>
+  <div class="analogy">Like an object with private fields — encapsulated state.</div>
+</section>
+
+<section>
+  <h3><code class="inline">this</code> — Just Enough</h3>
+  <pre><code class="language-javascript" data-trim>
+// In a method — `this` = the object
+const obj = {
+  name: "EJOT",
+  greet() { console.log(this.name) } // "EJOT" ✅
+}
+
+// Arrow functions DON'T have their own `this`
+const obj2 = {
+  name: "EJOT",
+  greet: () => console.log(this.name) // undefined ❌
+}
+
+// React rule of thumb:
+// Use arrow functions for event handlers → no this binding needed
+  </code></pre>
+  <p class="muted" style="margin-top:12px;">Good news: with React function components + hooks, you almost never need <code class="inline">this</code>.</p>
+</section>
+
+<!-- ===================== DAY 3 CHALLENGE ===================== -->
+<section data-background-color="#0a0a0a">
+  <div class="challenge-badge">✏️ DAY 3 — FILL IN THE BLANK</div>
+  <h3>Complete the ES6+ Code</h3>
+  <p class="muted">Each snippet has one blank — fill it in using today’s patterns.</p>
+  <pre><code class="language-javascript" data-trim>
+// 1. Destructure name and role from the object
+const { ___, ___ } = { name: "Alice", role: "admin", age: 30 }
+
+// 2. Merge two objects, but override the lang property
+const config = { ...defaults, ___: "de" }
+
+// 3. Collect the remaining items into 'rest'
+const [first, ___rest] = [1, 2, 3, 4, 5]
+
+// 4. Rewrite using an arrow function + template literal
+// Before:  function greet(n) { return "Hello " + n }
+const greet = ___ =&gt; ___
+
+// 5. Export this so other files can import it
+___ const API_URL = "https://api.ejot.com"
+  </code></pre>
+  <div class="challenge-tip">💬 Answers: 1) name, role &nbsp; 2) lang &nbsp; 3) ... &nbsp; 4) n =&gt; `Hello ${n}` &nbsp; 5) export</div>
+</section>
+
+<!-- ===================== DAY 4 INTRO ===================== -->
+<section class="day-intro" data-background-gradient="linear-gradient(135deg, #1a1a2e, #16213e)">
+  <div class="day-badge">DAY 4</div>
+  <h2>React — Core Concepts</h2>
+  <div class="goal">Understand what React is and why it exists</div>
+  <div style="text-align:left;">
+    <ul>
+      <li>Problem React solves</li>
+      <li>Components — function components</li>
+      <li>JSX — HTML in JS</li>
+      <li>Props — passing data down</li>
+      <li>State — <code class="inline">useState</code> hook</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h3>Why React Exists</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:#ff6b6b; font-weight:bold;">Without React</p>
+      <pre><code class="language-javascript" data-trim style="font-size:0.65em;">
+// Every state change:
+// 1. Update the data
+// 2. Find the right DOM elements
+// 3. Update them manually
+// 4. Don't forget edge cases
+// 5. Gets messy fast at scale
+const el = document.getElementById("count")
+el.textContent = newCount
+// × No structure
+// × Hard to reuse
+// × Hard to test
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">With React</p>
+      <pre><code class="language-javascript" data-trim style="font-size:0.65em;">
+// Describe WHAT to show, not HOW to update
+function Counter() {
+  const [count, setCount] = useState(0)
+
+  return (
+    &lt;button onClick={() => setCount(count + 1)}&gt;
+      Count: {count}
+    &lt;/button&gt;
+  )
+}
+// ✓ Declarative
+// ✓ Reusable component
+// ✓ React handles DOM updates
+      </code></pre>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>Components</h3>
+  <p>Everything in React is a <strong class="highlight">component</strong> — a JS function that returns UI.</p>
+  <pre><code class="language-jsx" data-trim>
+// A component is just a function
+function UserCard({ name, email }) {
+  return (
+    &lt;div className="card"&gt;
+      &lt;h2&gt;{name}&lt;/h2&gt;
+      &lt;p&gt;{email}&lt;/p&gt;
+    &lt;/div&gt;
+  )
+}
+
+// Compose components like LEGO
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;UserCard name="Alice" email="alice@ejot.com" /&gt;
+      &lt;UserCard name="Bob"   email="bob@ejot.com"   /&gt;
+    &lt;/div&gt;
+  )
+}
+  </code></pre>
+  <div class="analogy">Components are like microservices for UI — small, reusable, composable.</div>
+</section>
+
+<section>
+  <h3>JSX — Not Magic, Just Syntax Sugar</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:var(--accent)">What you write (JSX)</p>
+      <pre><code class="language-jsx" data-trim>
+const element = (
+  &lt;div className="box"&gt;
+    &lt;h1&gt;Hello&lt;/h1&gt;
+  &lt;/div&gt;
+)
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent)">What it compiles to</p>
+      <pre><code class="language-javascript" data-trim>
+const element = React.createElement(
+  "div",
+  { className: "box" },
+  React.createElement("h1", null, "Hello")
+)
+      </code></pre>
+    </div>
+  </div>
+  <div style="margin-top:16px; text-align:left;">
+    <p><strong>Key JSX rules:</strong></p>
+    <ul>
+      <li>Use <code class="inline">className</code> not <code class="inline">class</code></li>
+      <li>All tags must be closed: <code class="inline">&lt;br /&gt;</code></li>
+      <li>One root element (or use <code class="inline">&lt;&gt;...&lt;/&gt;</code> Fragment)</li>
+      <li>JS expressions go in <code class="inline">{ }</code></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h3>Props — Passing Data Down</h3>
+  <pre><code class="language-jsx" data-trim>
+// Parent passes data via props (like function arguments)
+function App() {
+  return &lt;Greeting name="Alice" isAdmin={true} /&gt;
+}
+
+// Child receives props as an object
+function Greeting({ name, isAdmin }) {
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Hello, {name}!&lt;/p&gt;
+      {isAdmin &amp;&amp; &lt;p&gt;You have admin access.&lt;/p&gt;}
+    &lt;/div&gt;
+  )
+}
+  </code></pre>
+  <div class="analogy">Props = function parameters. They flow one way: parent → child (never the other way).</div>
+</section>
+
+<section>
+  <h3>State — <code class="inline">useState</code></h3>
+  <pre><code class="language-jsx" data-trim>
+import { useState } from "react"
+
+function Counter() {
+  // [currentValue, setterFunction] = useState(initialValue)
+  const [count, setCount] = useState(0)
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Count: {count}&lt;/p&gt;
+      &lt;button onClick={() => setCount(count + 1)}&gt;+&lt;/button&gt;
+      &lt;button onClick={() => setCount(count - 1)}&gt;-&lt;/button&gt;
+      &lt;button onClick={() => setCount(0)}&gt;Reset&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+
+// When setCount() is called → React re-renders the component
+  </code></pre>
+  <div class="analogy">State is like a local variable that, when changed, automatically triggers a UI refresh.</div>
+</section>
+
+<section data-background-color="#0d1117">
+  <h3>Day 4 — Live Demo</h3>
+  <div class="card" style="text-align:left;">
+    <p style="color:var(--accent); font-weight:bold;">Exercise: Counter + Dynamic List</p>
+    <pre><code class="language-jsx" data-trim>
+function App() {
+  const [items, setItems] = useState(["Apple", "Banana"])
+  const [input, setInput] = useState("")
+
+  const addItem = () => {
+    if (!input) return
+    setItems([...items, input])
+    setInput("")
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;input value={input} onChange={e => setInput(e.target.value)} /&gt;
+      &lt;button onClick={addItem}&gt;Add&lt;/button&gt;
+      &lt;ul&gt;
+        {items.map((item, i) =&gt; &lt;li key={i}&gt;{item}&lt;/li&gt;)}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  )
+}
+    </code></pre>
+  </div>
+</section>
+
+<!-- ===================== DAY 4 CHALLENGE ===================== -->
+<section data-background-color="#0a0a0a">
+  <div class="challenge-badge">❓ DAY 4 — TRUE OR FALSE</div>
+  <h3>React Concepts Check</h3>
+  <p class="muted">For each statement — is it true or false? And why?</p>
+  <div style="text-align:left;">
+    <div class="card">1. A component <strong>re-renders</strong> every time <code class="inline">setState</code> is called.</div>
+    <div class="card">2. A child component <strong>can modify</strong> the props it receives.</div>
+    <div class="card">3. JSX is valid JavaScript — it just compiles to <code class="inline">React.createElement()</code> calls.</div>
+    <div class="card">4. You can call <code class="inline">useState</code> inside an <code class="inline">if</code> statement.</div>
+    <div class="card">5. <code class="inline">{isAdmin &amp;&amp; &lt;AdminPanel /&gt;}</code> only renders <code class="inline">&lt;AdminPanel&gt;</code> when <code class="inline">isAdmin</code> is <code class="inline">true</code>.</div>
+  </div>
+  <div class="challenge-tip">💬 Answers: 1) True &nbsp; 2) False — props are read-only &nbsp; 3) True &nbsp; 4) False — hooks must be at the top level &nbsp; 5) True</div>
+</section>
+
+<!-- ===================== DAY 5 INTRO ===================== -->
+<section class="day-intro" data-background-gradient="linear-gradient(135deg, #1a1a2e, #16213e)">
+  <div class="day-badge">DAY 5</div>
+  <h2>React — Data Flow &amp; Real World</h2>
+  <div class="goal">See how a real frontend app is structured</div>
+  <div style="text-align:left;">
+    <ul>
+      <li><code class="inline">useEffect</code> — lifecycle in hooks</li>
+      <li>Fetching data from an API</li>
+      <li>Lifting state up</li>
+      <li>Routing concept (React Router)</li>
+      <li>Folder structure of a real project</li>
+      <li>Where frontend meets backend</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h3><code class="inline">useEffect</code> — Side Effects</h3>
+  <pre><code class="language-jsx" data-trim>
+import { useState, useEffect } from "react"
+
+function UserProfile({ userId }) {
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    // Runs AFTER the component renders
+    fetch(`/api/users/${userId}`)
+      .then(res => res.json())
+      .then(data => setUser(data))
+  }, [userId]) // dependency array — re-run when userId changes
+
+  if (!user) return &lt;p&gt;Loading...&lt;/p&gt;
+  return &lt;p&gt;{user.name}&lt;/p&gt;
+}
+  </code></pre>
+  <div class="two-col" style="margin-top:12px; font-size:0.8em;">
+    <div class="card"><code class="inline">[]</code> — run once on mount</div>
+    <div class="card"><code class="inline">[id]</code> — run when id changes</div>
+  </div>
+  <div class="analogy">Like <code class="inline">OnInit</code> / lifecycle hooks — run code when something mounts or changes.</div>
+</section>
+
+<section>
+  <h3>Fetching Data from an API</h3>
+  <pre><code class="language-jsx" data-trim>
+function UserList() {
+  const [users, setUsers]   = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError]   = useState(null)
+
+  useEffect(() => {
+    fetch("/api/users")
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to fetch")
+        return res.json()
+      })
+      .then(data => setUsers(data))
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false))
+  }, [])
+
+  if (loading) return &lt;p&gt;Loading...&lt;/p&gt;
+  if (error)   return &lt;p&gt;Error: {error}&lt;/p&gt;
+  return &lt;ul&gt;{users.map(u =&gt; &lt;li key={u.id}&gt;{u.name}&lt;/li&gt;)}&lt;/ul&gt;
+}
+  </code></pre>
+</section>
+
+<section>
+  <h3>Lifting State Up</h3>
+  <pre><code class="language-jsx" data-trim>
+// When two siblings need the same state → lift to parent
+function App() {
+  const [search, setSearch] = useState("")
+
+  return (
+    &lt;div&gt;
+      &lt;SearchBar value={search} onChange={setSearch} /&gt;
+      &lt;UserList  filter={search} /&gt;
+    &lt;/div&gt;
+  )
+}
+
+// Child receives state + setter as props
+function SearchBar({ value, onChange }) {
+  return &lt;input value={value} onChange={e =&gt; onChange(e.target.value)} /&gt;
+}
+  </code></pre>
+  <div class="analogy">Like sharing a variable between two services via a shared database or message bus.</div>
+</section>
+
+<section>
+  <h3>Routing with React Router</h3>
+  <pre><code class="language-jsx" data-trim>
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom"
+
+function App() {
+  return (
+    &lt;BrowserRouter&gt;
+      &lt;nav&gt;
+        &lt;Link to="/"&gt;Home&lt;/Link&gt;
+        &lt;Link to="/users"&gt;Users&lt;/Link&gt;
+      &lt;/nav&gt;
+
+      &lt;Routes&gt;
+        &lt;Route path="/"       element={&lt;Home /&gt;}        /&gt;
+        &lt;Route path="/users"  element={&lt;UserList /&gt;}    /&gt;
+        &lt;Route path="/users/:id" element={&lt;UserDetail /&gt;} /&gt;
+      &lt;/Routes&gt;
+    &lt;/BrowserRouter&gt;
+  )
+}
+  </code></pre>
+  <div class="analogy">Routes in React Router ≈ URL path handlers in your REST API router.</div>
+</section>
+
+<section>
+  <h3>Typical React Project Structure</h3>
+  <div class="two-col">
+    <pre><code class="language-bash" data-trim>
+src/
+├── components/     # Reusable UI pieces
+│   ├── Button.tsx
+│   └── Card.tsx
+├── pages/          # Route-level components
+│   ├── Home.tsx
+│   └── Users.tsx
+├── hooks/          # Custom hooks
+│   └── useUsers.ts
+├── api/            # API calls
+│   └── users.ts
+├── types/          # TypeScript types
+│   └── user.ts
+└── App.tsx         # Root component
+    </code></pre>
+    <div>
+      <div class="card" style="font-size:0.8em; margin-bottom:10px;">
+        <strong style="color:var(--accent)">components/</strong><br/>
+        Small reusable pieces (Button, Modal, Input)
+      </div>
+      <div class="card" style="font-size:0.8em; margin-bottom:10px;">
+        <strong style="color:var(--accent)">pages/</strong><br/>
+        One file per route
+      </div>
+      <div class="card" style="font-size:0.8em;">
+        <strong style="color:var(--accent)">api/</strong><br/>
+        All fetch calls in one place
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>Where Frontend Meets Backend</h3>
+  <div style="text-align:left;">
+    <div class="card">
+      <strong style="color:var(--accent)">REST API calls</strong> — <code class="inline">fetch("/api/users")</code> — you already know this
+    </div>
+    <div class="card">
+      <strong style="color:var(--accent)">CORS</strong> — browser blocks cross-origin requests unless your server allows it (<code class="inline">Access-Control-Allow-Origin</code>)
+    </div>
+    <div class="card">
+      <strong style="color:var(--accent)">Auth tokens</strong> — stored in <code class="inline">localStorage</code> or cookies, sent via <code class="inline">Authorization: Bearer &lt;token&gt;</code>
+    </div>
+    <div class="card">
+      <strong style="color:var(--accent)">Environment variables</strong> — <code class="inline">VITE_API_URL=https://api.ejot.com</code>
+    </div>
+  </div>
+  <p class="muted" style="margin-top:12px;">Frontend devs are your API consumers — clearer contracts = fewer bugs.</p>
+</section>
+
+<!-- ===================== DAY 5 CHALLENGE ===================== -->
+<section data-background-color="#0a0a0a">
+  <div class="challenge-badge">🔍 DAY 5 — SPOT THE ISSUE</div>
+  <h3>What’s Wrong Here?</h3>
+  <p class="muted">Each snippet has one problem from today’s session. Can you find it?</p>
+  <div class="two-col">
+    <div>
+      <pre><code class="language-jsx" data-trim>
+// Problem 1
+function Profile({ userId }) {
+  const [user, setUser] = useState(null)
+
+  useEffect(() =&gt; {
+    fetch(`/api/users/${userId}`)
+      .then(r =&gt; r.json())
+      .then(setUser)
+  }, [])  // &lt;— what’s wrong?
+
+  return &lt;p&gt;{user.name}&lt;/p&gt;
+}
+      </code></pre>
+    </div>
+    <div>
+      <pre><code class="language-jsx" data-trim>
+// Problem 2
+function SearchPage() {
+  const [query, setQuery] = useState("")
+
+  return (
+    &lt;div&gt;
+      &lt;SearchBar /&gt;
+      &lt;Results filter={query} /&gt;
+    &lt;/div&gt;
+  )
+}
+// SearchBar needs to update `query`
+// but it has no access to it — why?
+      </code></pre>
+    </div>
+  </div>
+  <div class="challenge-tip">💬 P1: missing <code class="inline">userId</code> in deps array + <code class="inline">user?.name</code> (optional chaining) &nbsp;··· P2: state needs to be lifted up to the parent</div>
+</section>
+
+<!-- ===================== DAY 6 INTRO ===================== -->
+<section class="day-intro" data-background-gradient="linear-gradient(135deg, #1a1a2e, #16213e)">
+  <div class="day-badge">DAY 6</div>
+  <h2>TypeScript + Tailwind CSS</h2>
+  <div class="goal">Type-safe code and utility-first styling — two tools every frontend dev relies on</div>
+  <div class="two-col" style="text-align:left; margin-top:10px;">
+    <div>
+      <p style="color:var(--accent); margin-bottom:8px;"><strong>TypeScript</strong></p>
+      <ul>
+        <li>What TS is and why use it</li>
+        <li>Basic types &amp; interfaces</li>
+        <li>Optional &amp; union types</li>
+        <li>Generics — just enough</li>
+        <li>Typing React props</li>
+      </ul>
+    </div>
+    <div>
+      <p style="color:var(--accent); margin-bottom:8px;"><strong>Tailwind CSS</strong></p>
+      <ul>
+        <li>Utility-first concept</li>
+        <li>Common classes cheat sheet</li>
+        <li>Responsive breakpoints</li>
+        <li>Hover, focus &amp; dark mode</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>Why TypeScript?</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:#ff6b6b; font-weight:bold;">JavaScript</p>
+      <pre><code class="language-javascript" data-trim>
+function getUser(id) {
+  return fetch(`/api/users/${id}`)
+}
+
+// What does this return?
+// What type is `id`?
+// No idea until runtime 😬
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">TypeScript</p>
+      <pre><code class="language-typescript" data-trim>
+interface User {
+  id: number
+  name: string
+  email: string
+}
+
+async function getUser(id: number): Promise&lt;User&gt; {
+  const res = await fetch(`/api/users/${id}`)
+  return res.json()
+}
+// ✓ IDE autocomplete
+// ✓ Compile-time errors
+      </code></pre>
+    </div>
+  </div>
+  <div class="analogy">TypeScript is to JavaScript what Go's type system is to dynamically typed languages — same idea, compile-time safety.</div>
+</section>
+
+<section>
+  <h3>Basic Types</h3>
+  <pre><code class="language-typescript" data-trim>
+// Primitives
+const name: string  = "Alice"
+const age:  number  = 30
+const active: boolean = true
+
+// Arrays
+const ids:   number[] = [1, 2, 3]
+const names: string[] = ["Alice", "Bob"]
+
+// Object type inline
+const user: { name: string; age: number } = { name: "Alice", age: 30 }
+
+// Union — can be one of several types
+let id: string | number = 42
+id = "abc"  // also valid
+
+// Optional — may or may not exist
+const nickname?: string  // undefined is fine
+  </code></pre>
+</section>
+
+<section>
+  <h3>Interfaces &amp; Type Aliases</h3>
+  <pre><code class="language-typescript" data-trim>
+// Interface — for object shapes (preferred for APIs)
+interface User {
+  id:       number
+  name:     string
+  email:    string
+  role?:    "admin" | "viewer"  // optional + literal union
+}
+
+// Type alias — more flexible, can alias primitives too
+type UserId = number
+type Status = "active" | "inactive" | "pending"
+
+// Extending an interface
+interface AdminUser extends User {
+  permissions: string[]
+}
+
+// Using them
+function renderUser(user: User) {
+  return `${user.name} &lt;${user.email}&gt;`
+}
+  </code></pre>
+  <div class="analogy">Interfaces = Go structs / Java interfaces. Type aliases = type definitions.</div>
+</section>
+
+<section>
+  <h3>Typing Functions &amp; Generics</h3>
+  <pre><code class="language-typescript" data-trim>
+// Typed function
+function add(a: number, b: number): number {
+  return a + b
+}
+
+// Arrow function
+const greet = (name: string): string => `Hello, ${name}!`
+
+// Generics — reusable with any type
+function first&lt;T&gt;(arr: T[]): T | undefined {
+  return arr[0]
+}
+
+first([1, 2, 3])        // type: number
+first(["a", "b", "c"]) // type: string
+
+// Common in React (you'll read this a lot)
+const [user, setUser] = useState&lt;User | null&gt;(null)
+  </code></pre>
+  <div class="analogy">Generics in TS = generics in Go — write once, work with any type.</div>
+</section>
+
+<section>
+  <h3>TypeScript in React — Quick Patterns</h3>
+  <pre><code class="language-typescript" data-trim>
+// Typing props
+interface ButtonProps {
+  label:    string
+  onClick:  () =&gt; void
+  disabled?: boolean
+}
+
+function Button({ label, onClick, disabled = false }: ButtonProps) {
+  return (
+    &lt;button onClick={onClick} disabled={disabled}&gt;
+      {label}
+    &lt;/button&gt;
+  )
+}
+
+// Typing event handlers
+const handleChange = (e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; {
+  console.log(e.target.value)
+}
+  </code></pre>
+</section>
+
+<!-- Tailwind CSS — continued from Day 6 -->
+
+<section>
+  <h3>Tailwind CSS</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:#ff6b6b; font-weight:bold;">Traditional CSS</p>
+      <pre><code class="language-css" data-trim>
+/* card.css */
+.card {
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  gap: 8px;
+}
+      </code></pre>
+      <pre><code class="language-html" data-trim>
+&lt;div class="card"&gt;...&lt;/div&gt;
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Tailwind</p>
+      <pre><code class="language-html" data-trim>
+&lt;div class="p-4 bg-white rounded-lg
+            shadow-md flex gap-2"&gt;
+  ...
+&lt;/div&gt;
+
+
+
+
+
+      </code></pre>
+      <p style="font-size:0.75em; color:#aaa;">No context switching. Style lives with markup. No unused CSS in prod.</p>
+    </div>
+  </div>
+  <div class="analogy">Like writing inline styles — but with a design system built in and zero performance cost.</div>
+</section>
+
+<section>
+  <h3>Most Used Classes — Cheat Sheet</h3>
+  <div class="two-col" style="font-size:0.8em;">
+    <div>
+      <div class="card">
+        <strong style="color:var(--accent)">Spacing</strong><br/>
+        <code class="inline">p-4</code> padding: 1rem<br/>
+        <code class="inline">px-4</code> padding left+right<br/>
+        <code class="inline">m-2</code> margin: 0.5rem<br/>
+        <code class="inline">mt-8</code> margin-top: 2rem
+      </div>
+      <div class="card" style="margin-top:10px;">
+        <strong style="color:var(--accent)">Layout</strong><br/>
+        <code class="inline">flex</code> display: flex<br/>
+        <code class="inline">flex-col</code> column direction<br/>
+        <code class="inline">grid grid-cols-3</code> 3-col grid<br/>
+        <code class="inline">gap-4</code> gap between items
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <strong style="color:var(--accent)">Typography</strong><br/>
+        <code class="inline">text-xl</code> font size<br/>
+        <code class="inline">font-bold</code> font weight<br/>
+        <code class="inline">text-gray-500</code> color<br/>
+        <code class="inline">leading-relaxed</code> line height
+      </div>
+      <div class="card" style="margin-top:10px;">
+        <strong style="color:var(--accent)">Sizing</strong><br/>
+        <code class="inline">w-full</code> width: 100%<br/>
+        <code class="inline">w-1/2</code> width: 50%<br/>
+        <code class="inline">h-screen</code> height: 100vh<br/>
+        <code class="inline">max-w-xl</code> max-width
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>Responsive Design</h3>
+  <pre><code class="language-html" data-trim>
+&lt;!-- Tailwind is mobile-first --&gt;
+&lt;!-- Prefixes: sm: md: lg: xl: 2xl: --&gt;
+
+&lt;div class="
+  flex flex-col       /* mobile: stack vertically */
+  md:flex-row         /* ≥768px: side by side */
+  gap-4
+"&gt;
+  &lt;div class="
+    w-full            /* mobile: full width */
+    md:w-1/2          /* ≥768px: half width */
+    p-4 bg-white rounded
+  "&gt;Left&lt;/div&gt;
+  &lt;div class="w-full md:w-1/2 p-4 bg-gray-100 rounded"&gt;Right&lt;/div&gt;
+&lt;/div&gt;
+  </code></pre>
+  <div class="analogy">Breakpoint prefixes = CSS media queries, but inline. <code class="inline">md:flex-row</code> means "flex-row when screen ≥ 768px".</div>
+</section>
+
+<section>
+  <h3>Hover, Focus &amp; Dark Mode</h3>
+  <pre><code class="language-html" data-trim>
+&lt;!-- Hover state --&gt;
+&lt;button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"&gt;
+  Click Me
+&lt;/button&gt;
+
+&lt;!-- Focus state (accessibility) --&gt;
+&lt;input class="border focus:outline-none focus:ring-2 focus:ring-blue-400" /&gt;
+
+&lt;!-- Dark mode --&gt;
+&lt;div class="bg-white text-black dark:bg-gray-900 dark:text-white"&gt;
+  Adapts to system theme
+&lt;/div&gt;
+
+&lt;!-- Combining everything --&gt;
+&lt;button class="
+  bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold
+  hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-400
+  transition-colors duration-200
+"&gt;
+  Submit
+&lt;/button&gt;
+  </code></pre>
+</section>
+
+<!-- ===================== DAY 6 CHALLENGE ===================== -->
+<section data-background-color="#0a0a0a">
+  <div class="challenge-badge">📝 DAY 6 — QUICK CHECK</div>
+  <h3>TypeScript + Tailwind — Spot &amp; Match</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">TypeScript: What’s the error?</p>
+      <pre><code class="language-typescript" data-trim>
+interface User {
+  name: string
+  age:  number
+}
+
+function greet(user: User) {
+  return `Hi ${user.name}!`
+}
+
+greet({ name: "Alice", age: "30" })
+//                          ^^^^
+// ← what’s the TypeScript error?
+      </code></pre>
+      <div class="challenge-tip" style="margin-top:8px;">💬 <code class="inline">age</code> expects <code class="inline">number</code>, not <code class="inline">string</code></div>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Tailwind: Match the class</p>
+      <div class="card" style="font-size:0.78em; margin-bottom:6px;"><code class="inline">p-4</code> &nbsp;→&nbsp; ___</div>
+      <div class="card" style="font-size:0.78em; margin-bottom:6px;"><code class="inline">flex gap-2</code> &nbsp;→&nbsp; ___</div>
+      <div class="card" style="font-size:0.78em; margin-bottom:6px;"><code class="inline">text-red-500</code> &nbsp;→&nbsp; ___</div>
+      <div class="card" style="font-size:0.78em; margin-bottom:6px;"><code class="inline">md:flex-row</code> &nbsp;→&nbsp; ___</div>
+      <div class="challenge-tip" style="margin-top:8px;">💬 padding 16px &nbsp;· display flex + gap &nbsp;· red text &nbsp;· flex-row on ≥ 768px</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DAY 7 INTRO ===================== -->
+<section class="day-intro" data-background-gradient="linear-gradient(135deg, #1a1a2e, #16213e)">
+  <div class="day-badge">DAY 7</div>
+  <h2>React Router + React Query + Zustand</h2>
+  <div class="goal">Navigation, server state, and global UI state — the complete picture</div>
+  <div class="two-col" style="text-align:left; margin-top:10px;">
+    <div>
+      <p style="color:var(--accent); margin-bottom:6px;"><strong>React Router</strong></p>
+      <ul>
+        <li>Recap: Routes, Route, Link</li>
+        <li><code class="inline">useParams</code> &amp; <code class="inline">useNavigate</code></li>
+        <li>Protected routes pattern</li>
+      </ul>
+      <p style="color:var(--accent); margin:10px 0 6px;"><strong>React Query</strong></p>
+      <ul>
+        <li><code class="inline">useQuery</code> &amp; <code class="inline">useMutation</code></li>
+        <li>Caching &amp; invalidation</li>
+      </ul>
+    </div>
+    <div>
+      <p style="color:var(--accent); margin-bottom:6px;"><strong>Zustand</strong></p>
+      <ul>
+        <li>Creating a store</li>
+        <li>Reading &amp; updating state</li>
+        <li>When to use vs <code class="inline">useState</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>React Router — Quick Recap</h3>
+  <pre><code class="language-jsx" data-trim>
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom"
+
+function App() {
+  return (
+    &lt;BrowserRouter&gt;
+      &lt;nav&gt;
+        &lt;Link to="/"&gt;Home&lt;/Link&gt;
+        &lt;Link to="/users"&gt;Users&lt;/Link&gt;
+      &lt;/nav&gt;
+      &lt;Routes&gt;
+        &lt;Route path="/"           element={&lt;Home /&gt;}       /&gt;
+        &lt;Route path="/users"      element={&lt;UserList /&gt;}   /&gt;
+        &lt;Route path="/users/:id"  element={&lt;UserDetail /&gt;} /&gt;
+      &lt;/Routes&gt;
+    &lt;/BrowserRouter&gt;
+  )
+}
+  </code></pre>
+  <div class="analogy">Routes ≈ HTTP path handlers in your API router. <code class="inline">:id</code> is a URL path parameter.</div>
+</section>
+
+<section>
+  <h3><code class="inline">useParams</code> &amp; <code class="inline">useNavigate</code></h3>
+  <pre><code class="language-tsx" data-trim>
+import { useParams, useNavigate } from "react-router-dom"
+
+// useParams — read the :id from the URL
+function UserDetail() {
+  const { id } = useParams&lt;{ id: string }&gt;()  // /users/42 → id = "42"
+  return &lt;h1&gt;User #{id}&lt;/h1&gt;
+}
+
+// useNavigate — redirect programmatically
+function LoginForm() {
+  const navigate = useNavigate()
+
+  const handleLogin = async () =&gt; {
+    await authApi.login(credentials)
+    navigate("/dashboard")   // redirect after login
+    navigate(-1)             // go back (like browser back button)
+  }
+}
+  </code></pre>
+  <div class="analogy"><code class="inline">useNavigate</code> ≈ a server-side redirect — change the URL without a link click.</div>
+</section>
+
+<section>
+  <h3>Protected Routes</h3>
+  <pre><code class="language-tsx" data-trim>
+import { Navigate } from "react-router-dom"
+
+// Wrapper that checks auth before rendering the route
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { user } = useAuthStore()
+
+  if (!user) return &lt;Navigate to="/login" replace /&gt;
+  return &lt;&gt;{children}&lt;/&gt;
+}
+
+// Usage
+&lt;Routes&gt;
+  &lt;Route path="/login"     element={&lt;Login /&gt;} /&gt;
+  &lt;Route path="/dashboard" element={
+    &lt;ProtectedRoute&gt;&lt;Dashboard /&gt;&lt;/ProtectedRoute&gt;
+  } /&gt;
+&lt;/Routes&gt;
+  </code></pre>
+  <div class="analogy">Like auth middleware in Go/Express — intercept the request, check the token, continue or redirect.</div>
+</section>
+
+<section>
+  <h3>React Query — The Problem It Solves</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:#ff6b6b; font-weight:bold;">Without React Query</p>
+      <pre><code class="language-jsx" data-trim style="font-size:0.65em;">
+// Boilerplate you write EVERY time
+const [data, setData]     = useState(null)
+const [loading, setLoading] = useState(true)
+const [error, setError]   = useState(null)
+
+useEffect(() =&gt; {
+  setLoading(true)
+  fetch("/api/users")
+    .then(r =&gt; r.json())
+    .then(setData)
+    .catch(setError)
+    .finally(() =&gt; setLoading(false))
+}, [])
+// + no caching
+// + refetches on every mount
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">With React Query</p>
+      <pre><code class="language-jsx" data-trim style="font-size:0.65em;">
+import { useQuery } from "@tanstack/react-query"
+
+function UserList() {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["users"],
+    queryFn: () =&gt;
+      fetch("/api/users").then(r =&gt; r.json())
+  })
+
+  if (isLoading) return &lt;p&gt;Loading...&lt;/p&gt;
+  if (error)     return &lt;p&gt;Error!&lt;/p&gt;
+  return &lt;ul&gt;{data.map(u =&gt; &lt;li key={u.id}&gt;{u.name}&lt;/li&gt;)}&lt;/ul&gt;
+}
+// + automatic caching
+// + background refetch
+// + deduplication
+      </code></pre>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>React Query — <code class="inline">useMutation</code></h3>
+  <pre><code class="language-jsx" data-trim>
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+
+function CreateUser() {
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation({
+    mutationFn: (newUser) =&gt;
+      fetch("/api/users", {
+        method: "POST",
+        body: JSON.stringify(newUser),
+        headers: { "Content-Type": "application/json" },
+      }).then(r =&gt; r.json()),
+
+    onSuccess: () =&gt; {
+      // Invalidate cache → triggers refetch of user list
+      queryClient.invalidateQueries({ queryKey: ["users"] })
+    },
+  })
+
+  return (
+    &lt;button onClick={() =&gt; mutation.mutate({ name: "Alice" })}&gt;
+      {mutation.isPending ? "Saving..." : "Add User"}
+    &lt;/button&gt;
+  )
+}
+  </code></pre>
+  <div class="analogy">Query cache invalidation ≈ cache busting after a write operation in your backend.</div>
+</section>
+
+<section>
+  <h3>Zustand — Global UI State</h3>
+  <div class="card" style="margin-bottom:16px; font-size:0.85em;">
+    <strong style="color:var(--accent)">When to use Zustand vs useState?</strong><br/>
+    Use <code class="inline">useState</code> for local, component-level state.<br/>
+    Use <strong>Zustand</strong> when multiple components across the tree need the same state.
+  </div>
+  <pre><code class="language-typescript" data-trim>
+import { create } from "zustand"
+
+interface AuthStore {
+  user:    User | null
+  token:   string | null
+  login:   (user: User, token: string) =&gt; void
+  logout:  () =&gt; void
+}
+
+const useAuthStore = create&lt;AuthStore&gt;((set) =&gt; ({
+  user:  null,
+  token: null,
+  login:  (user, token) =&gt; set({ user, token }),
+  logout: ()            =&gt; set({ user: null, token: null }),
+}))
+  </code></pre>
+</section>
+
+<section>
+  <h3>Zustand — Using the Store</h3>
+  <pre><code class="language-tsx" data-trim>
+// In any component — no Provider needed!
+function Navbar() {
+  const { user, logout } = useAuthStore()
+
+  return (
+    &lt;nav&gt;
+      &lt;span&gt;Hello, {user?.name}&lt;/span&gt;
+      &lt;button onClick={logout}&gt;Logout&lt;/button&gt;
+    &lt;/nav&gt;
+  )
+}
+
+function LoginForm() {
+  const login = useAuthStore((state) =&gt; state.login)
+
+  const handleLogin = async () =&gt; {
+    const { user, token } = await authApi.login(credentials)
+    login(user, token) // updates store → Navbar re-renders
+  }
+
+  return &lt;form onSubmit={handleLogin}&gt;...&lt;/form&gt;
+}
+  </code></pre>
+  <div class="analogy">Zustand store = a singleton service with reactive subscriptions — like a simple in-memory event bus.</div>
+</section>
+
+<section>
+  <h3>React Query vs Zustand — When to Use What</h3>
+  <div style="text-align:left;">
+    <div class="card">
+      <strong style="color:var(--accent)">React Query</strong> — for <strong>server state</strong><br/>
+      <span style="font-size:0.85em; color:#aaa;">Data that comes from an API: users, products, orders. It has a source of truth on the server.</span>
+    </div>
+    <div class="card">
+      <strong style="color:var(--accent)">Zustand</strong> — for <strong>client/UI state</strong><br/>
+      <span style="font-size:0.85em; color:#aaa;">Auth session, modal open/close, sidebar state, selected items. Lives only in the browser.</span>
+    </div>
+    <div class="card">
+      <strong style="color:var(--accent)">useState</strong> — for <strong>local component state</strong><br/>
+      <span style="font-size:0.85em; color:#aaa;">Form inputs, counters, toggles — state that only this component cares about.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DAY 7 CHALLENGE ===================== -->
+<section data-background-color="#0a0a0a">
+  <div class="challenge-badge">🎯 DAY 7 — WHICH TOOL?</div>
+  <h3>React Router vs React Query vs Zustand vs useState</h3>
+  <p class="muted">For each scenario — which tool would you reach for?</p>
+  <div style="text-align:left;">
+    <div class="card">1. Store the <strong>currently logged-in user</strong> so any component can access it</div>
+    <div class="card">2. <strong>Redirect to /dashboard</strong> after a successful login</div>
+    <div class="card">3. <strong>Fetch a list of products</strong> from the backend API with caching</div>
+    <div class="card">4. Track whether a <strong>dropdown is open or closed</strong> in a single component</div>
+    <div class="card">5. Read the <strong>:id from the URL</strong> to load a specific user’s profile</div>
+    <div class="card">6. <strong>Create a new order</strong> (POST request) and refresh the order list after</div>
+  </div>
+  <div class="challenge-tip">💬 1) Zustand &nbsp; 2) React Router useNavigate &nbsp; 3) React Query useQuery &nbsp; 4) useState &nbsp; 5) React Router useParams &nbsp; 6) React Query useMutation</div>
+</section>
+
+<!-- ===================== WRAP UP ===================== -->
+<section data-background-gradient="linear-gradient(135deg, #0f0c29, #302b63, #24243e)">
+  <h2>What You Now Know</h2>
+  <div class="two-col" style="text-align:left;">
+    <div>
+      <div class="card">✅ JS fundamentals — variables, functions, async</div>
+      <div class="card">✅ How the browser and DOM work</div>
+      <div class="card">✅ Modern ES6+ patterns you’ll read daily</div>
+      <div class="card">✅ React components, props, and state</div>
+    </div>
+    <div>
+      <div class="card">✅ Data fetching, project structure</div>
+      <div class="card">✅ TypeScript + Tailwind CSS</div>
+      <div class="card">✅ React Router — navigation patterns</div>
+      <div class="card">✅ React Query + Zustand — state management</div>
+    </div>
+  </div>
+</section>
+
+<section data-background-gradient="linear-gradient(135deg, #0f0c29, #302b63, #24243e)">
+  <h2>Practice Suggestions</h2>
+  <div style="text-align:left;">
+    <div class="card">📖 Read frontend code in your team's repo — you'll recognise most patterns now</div>
+    <div class="card">🔨 Build a small CRUD UI that calls one of your own backend APIs</div>
+    <div class="card">🔍 Open DevTools → Network tab and inspect the requests your frontend makes</div>
+    <div class="card">🤝 Pair with a frontend dev on one ticket — ask "why did you choose this?"</div>
+  </div>
+  <p style="margin-top:24px; font-size:1em; color:var(--accent2); font-style:italic;">"The best way to understand a frontend bug is to read the code."</p>
+</section>
+
+<section data-background-gradient="linear-gradient(135deg, #0f0c29, #302b63, #24243e)">
+  <h1 style="font-size:2.5em;">Thank You!</h1>
+  <p style="color:#aaa; margin-top:20px;">Questions? Open the DevTools console and let's explore.</p>
+  <div style="margin-top:30px;">
+    <span class="tag">JavaScript</span>
+    <span class="tag">TypeScript</span>
+    <span class="tag">React</span>
+    <span class="tag">Tailwind</span>
+    <span class="tag">React Query</span>
+    <span class="tag">Zustand</span>
+  </div>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: "c/t",
+    transition: "slide",
+    backgroundTransition: "fade",
+    controls: true,
+    progress: true,
+    center: true,
+    plugins: [ RevealHighlight, RevealNotes ],
+    highlight: {
+      highlightOnLoad: true,
+    }
+  })
+</script>
+</body>
+</html>

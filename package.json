@@ -1,0 +1,10 @@
+{
+  "name": "frontend-kickstart-slides",
+  "version": "1.0.0",
+  "description": "Frontend Kickstart — 7-day training slides",
+  "scripts": {
+    "serve": "npx --yes serve . --listen 8000",
+    "pdf": "npx --yes decktape reveal http://localhost:8000/slides.html slides.pdf --size 1920x1080 --pause 500",
+    "serve-and-pdf": "npx --yes concurrently -k -s first \"npm run serve\" \"sleep 3 && npm run pdf\""
+  }
+}
