@@ -533,6 +533,7 @@ npm run build
       <li>Modules: <code class="inline">import</code> / <code class="inline">export</code></li>
       <li>Closures &amp; scope</li>
       <li><code class="inline">this</code> keyword — just enough</li>
+      <li>Promises &amp; async patterns</li>
     </ul>
   </div>
 </section>
@@ -646,6 +647,108 @@ const obj2 = {
 // Use arrow functions for event handlers → no this binding needed
   </code></pre>
   <p class="muted" style="margin-top:12px;">Good news: with React function components + hooks, you almost never need <code class="inline">this</code>.</p>
+</section>
+
+<!-- ===================== PROMISES ===================== -->
+<section>
+  <h3>Promises — What &amp; Why</h3>
+  <p class="muted" style="font-size:0.85em;">A <strong style="color:var(--accent);">Promise</strong> represents a value that will be available <em>now, later, or never</em>.</p>
+  <div class="two-col" style="margin-top:12px;">
+    <div class="card">
+      <p style="color:var(--accent); font-weight:bold; margin:0 0 8px;">3 States</p>
+      <ul>
+        <li><span class="highlight">pending</span> — operation in progress</li>
+        <li style="color:#4ade80;">&#x2714; fulfilled — completed successfully</li>
+        <li style="color:#f87171;">&#x2718; rejected — completed with error</li>
+      </ul>
+    </div>
+    <div class="card">
+      <p style="color:var(--accent); font-weight:bold; margin:0 0 8px;">Creating a Promise</p>
+      <pre><code class="language-javascript" data-trim style="font-size:0.72em;">
+const p = new Promise((resolve, reject) => {
+  const ok = true
+  if (ok) resolve("done!") // fulfill
+  else    reject("oops!")  // reject
+})
+      </code></pre>
+    </div>
+  </div>
+  <div class="analogy">Like a Go channel that sends exactly one value — success or error.</div>
+</section>
+
+<section>
+  <h3>Promise Methods</h3>
+  <pre><code class="language-javascript" data-trim>
+function fetchUser(id) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (id > 0) resolve({ id, name: "Alice" })
+      else        reject(new Error("Invalid ID"))
+    }, 500)
+  })
+}
+
+// .then()  — runs when fulfilled
+// .catch() — runs when rejected
+// .finally() — runs always (cleanup)
+fetchUser(1)
+  .then(user   => console.log("Got:", user.name)) // "Got: Alice"
+  .catch(err   => console.error("Error:", err.message))
+  .finally(()  => console.log("Request complete"))
+  </code></pre>
+  <p class="muted"><code class="inline">.then()</code> returns a new Promise, so calls can be chained.</p>
+</section>
+
+<section>
+  <h3>Chaining &amp; <code class="inline">Promise.all</code></h3>
+  <pre><code class="language-javascript" data-trim>
+// --- Chaining: each .then receives the previous return value ---
+fetchUser(1)
+  .then(user => fetchPosts(user.id))   // returns another Promise
+  .then(posts => renderPosts(posts))   // receives posts
+  .catch(err  => showError(err))
+
+// --- Promise.all: run tasks in PARALLEL, wait for ALL ---
+Promise.all([
+  fetchUser(1),
+  fetchUser(2),
+  fetchUser(3),
+]).then(([user1, user2, user3]) => {
+  console.log(user1.name, user2.name, user3.name)
+}).catch(err => console.error("One failed:", err))
+
+// --- Promise.allSettled: wait for ALL, even if some reject ---
+Promise.allSettled([fetchUser(1), fetchUser(-1)])
+  .then(results => results.forEach(r => console.log(r.status)))
+  // "fulfilled" , "rejected"
+  </code></pre>
+</section>
+
+<section>
+  <h3><code class="inline">async</code> / <code class="inline">await</code> — Cleaner Syntax</h3>
+  <p class="muted" style="font-size:0.82em;"><code class="inline">async/await</code> is just syntactic sugar over Promises — same engine underneath.</p>
+  <pre><code class="language-javascript" data-trim>
+// ❌ Nested .then() — hard to read
+fetchUser(1)
+  .then(user => fetchPosts(user.id))
+  .then(posts => renderPosts(posts))
+
+// ✅ async/await — reads like synchronous code
+async function loadDashboard(userId) {
+  try {
+    const user  = await fetchUser(userId)   // waits for resolve
+    const posts = await fetchPosts(user.id)
+    renderPosts(posts)
+  } catch (err) {
+    showError(err)                          // catches rejections
+  } finally {
+    hideSpinner()
+  }
+}
+
+loadDashboard(1)
+  </code></pre>
+  <div class="analogy">Like Go's <code class="inline">goroutine</code> + <code class="inline">channel</code> receive — write async flow as if it were sequential.</div>
 </section>
 
 <!-- ===================== DAY 3 CHALLENGE ===================== -->
