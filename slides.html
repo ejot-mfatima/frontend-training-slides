@@ -832,6 +832,161 @@ function Counter() {
   </div>
 </section>
 
+<!-- ===== NEW: WHY REACT IS IMPORTANT ===== -->
+<section>
+  <h3>Why React Is Important</h3>
+  <div class="two-col" style="font-size:0.88em;">
+    <div>
+      <div class="card" style="margin-bottom:10px;">
+        <p style="color:var(--accent); font-weight:bold; margin:0 0 6px;">🏭 Industry Standard</p>
+        <ul style="font-size:0.9em;">
+          <li>Used by Meta, Airbnb, Netflix, Atlassian</li>
+          <li>#1 most-used UI library (Stack Overflow 2024)</li>
+          <li>Huge job market demand</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p style="color:var(--accent); font-weight:bold; margin:0 0 6px;">♻️ Reusability at Scale</p>
+        <ul style="font-size:0.9em;">
+          <li>Build once → use everywhere</li>
+          <li>Design systems (MUI, Ant Design)</li>
+          <li>Share components across apps</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:10px;">
+        <p style="color:var(--accent); font-weight:bold; margin:0 0 6px;">⚡ Developer Experience</p>
+        <ul style="font-size:0.9em;">
+          <li>Hot reload — instant feedback loop</li>
+          <li>React DevTools for debugging state</li>
+          <li>Declarative = less mental overhead</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p style="color:var(--accent); font-weight:bold; margin:0 0 6px;">🌐 Ecosystem</p>
+        <ul style="font-size:0.9em;">
+          <li>React Native → mobile apps</li>
+          <li>Next.js → SSR &amp; full-stack</li>
+          <li>Millions of npm packages</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="analogy" style="font-size:0.8em; margin-top:10px;">React is to frontend what Spring Boot is to Java backend — the industry standard framework teams reach for first.</div>
+</section>
+
+<!-- ===== NEW: VIRTUAL DOM CONCEPT ===== -->
+<section>
+  <h3>The Virtual DOM</h3>
+  <p style="font-size:0.85em; color:#ccc; margin-bottom:16px;">React doesn't touch the real DOM directly — it uses a lightweight copy called the <strong style="color:var(--accent)">Virtual DOM</strong> to calculate the minimal set of changes needed.</p>
+
+  <!-- Visual diagram using CSS -->
+  <div style="display:flex; align-items:center; justify-content:center; gap:10px; font-size:0.78em;">
+
+    <!-- Step 1: State changes -->
+    <div style="text-align:center;">
+      <div style="background:rgba(97,218,251,0.12); border:1px solid var(--accent); border-radius:10px; padding:12px 16px; min-width:120px;">
+        <div style="font-size:1.4em;">🔄</div>
+        <p style="color:var(--accent); font-weight:bold; margin:4px 0;">State Change</p>
+        <code style="font-size:0.8em; color:#f7df1e;">setCount(5)</code>
+      </div>
+    </div>
+
+    <div style="font-size:1.6em; color:var(--accent);">→</div>
+
+    <!-- Step 2: New VDOM -->
+    <div style="text-align:center;">
+      <div style="background:rgba(97,218,251,0.12); border:1px solid var(--accent); border-radius:10px; padding:12px 16px; min-width:120px;">
+        <div style="font-size:1.4em;">🌲</div>
+        <p style="color:var(--accent); font-weight:bold; margin:4px 0;">New VDOM</p>
+        <p style="color:#aaa; margin:0; font-size:0.85em;">JS object tree<br/>(fast, in-memory)</p>
+      </div>
+    </div>
+
+    <div style="font-size:1.6em; color:var(--accent);">→</div>
+
+    <!-- Step 3: Diff -->
+    <div style="text-align:center;">
+      <div style="background:rgba(247,223,30,0.1); border:1px solid var(--accent2); border-radius:10px; padding:12px 16px; min-width:120px;">
+        <div style="font-size:1.4em;">🔍</div>
+        <p style="color:var(--accent2); font-weight:bold; margin:4px 0;">Diff (Reconcile)</p>
+        <p style="color:#aaa; margin:0; font-size:0.85em;">Old VDOM vs<br/>New VDOM</p>
+      </div>
+    </div>
+
+    <div style="font-size:1.6em; color:var(--accent);">→</div>
+
+    <!-- Step 4: Real DOM -->
+    <div style="text-align:center;">
+      <div style="background:rgba(100,220,100,0.1); border:1px solid #64dc64; border-radius:10px; padding:12px 16px; min-width:120px;">
+        <div style="font-size:1.4em;">🖥️</div>
+        <p style="color:#64dc64; font-weight:bold; margin:4px 0;">Real DOM</p>
+        <p style="color:#aaa; margin:0; font-size:0.85em;">Only changed<br/>nodes updated</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:18px; text-align:center;">
+    <div class="card" style="display:inline-block; padding:8px 20px; font-size:0.82em;">
+      🚫 Without VDOM → update <strong style="color:#ff6b6b;">entire DOM</strong> on every change &nbsp;|&nbsp;
+      ✅ With VDOM → update <strong style="color:#64dc64;">only what changed</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NEW: VIRTUAL DOM RECONCILIATION ===== -->
+<section>
+  <h3>Virtual DOM — Reconciliation in Action</h3>
+  <div class="two-col" style="font-size:0.82em; align-items:start;">
+    <div>
+      <p style="color:var(--accent); font-weight:bold; margin-bottom:6px;">🌲 Before (Old VDOM)</p>
+      <pre style="margin:0;"><code class="language-jsx" data-trim style="font-size:0.7em;">
+&lt;ul&gt;
+  &lt;li&gt;Apple&lt;/li&gt;       ← same
+  &lt;li&gt;Banana&lt;/li&gt;      ← same
+  &lt;li&gt;Cherry&lt;/li&gt;      ← same
+&lt;/ul&gt;
+      </code></pre>
+      <p style="color:var(--accent); font-weight:bold; margin:12px 0 6px;">🌳 After (New VDOM)</p>
+      <pre style="margin:0;"><code class="language-jsx" data-trim style="font-size:0.7em;">
+&lt;ul&gt;
+  &lt;li&gt;Apple&lt;/li&gt;       ← same ✓
+  &lt;li&gt;Banana&lt;/li&gt;      ← same ✓
+  &lt;li&gt;Cherry&lt;/li&gt;      ← same ✓
+  &lt;li&gt;Mango&lt;/li&gt;       ← NEW 🟡
+&lt;/ul&gt;
+      </code></pre>
+      <div style="background:rgba(100,220,100,0.1); border:1px solid #64dc64; border-radius:8px; padding:8px 12px; margin-top:10px; font-size:0.88em;">
+        ✅ React adds <strong>only the Mango</strong> <code style="font-size:0.85em; background:#333; padding:1px 5px; border-radius:3px; color:#f7df1e;">&lt;li&gt;</code> to the real DOM
+      </div>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold; margin-bottom:8px;">🔑 Why <code class="inline">key</code> matters</p>
+      <pre style="margin:0;"><code class="language-jsx" data-trim style="font-size:0.68em;">
+// ❌ BAD — React can't track items
+items.map((item, i) =&gt;
+  &lt;li key={i}&gt;{item}&lt;/li&gt;
+)
+
+// ✅ GOOD — stable, unique key
+items.map(item =&gt;
+  &lt;li key={item.id}&gt;{item.name}&lt;/li&gt;
+)
+      </code></pre>
+      <div class="card" style="margin-top:10px; font-size:0.85em;">
+        <p style="color:var(--accent); margin:0 0 4px;"><strong>Key rule:</strong> React uses <code class="inline">key</code> to know which list item changed, was added, or removed — without it, diffs are wrong and animations break.</p>
+      </div>
+      <div style="background:rgba(247,223,30,0.08); border-left:4px solid var(--accent2); padding:8px 14px; border-radius:0 8px 8px 0; font-size:0.82em; margin-top:8px;">
+        💡 The Virtual DOM is what makes React fast — but <code class="inline">key</code> is what makes list reconciliation <em>correct</em>.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== END NEW SLIDES ===== -->
+
 <section>
   <h3>Components</h3>
   <p>Everything in React is a <strong class="highlight">component</strong> — a JS function that returns UI.</p>
