@@ -131,7 +131,7 @@
 <section class="title-slide" data-background-gradient="linear-gradient(135deg, #0f0c29, #302b63, #24243e)">
   <h1>Frontend Kickstart</h1>
   <p style="color:var(--accent); font-size:1.1em; margin-top:8px; letter-spacing:1px;">Getting Started with Frontend Development</p>
-  <p style="color:#aaa; margin-top:16px;">7-day learning path — 1 hour per session</p>
+  <p style="color:#aaa; margin-top:16px;">8-day learning path — 1 hour per session</p>
   <div style="margin-top:30px;">
     <span class="tag">JavaScript</span>
     <span class="tag">DOM</span>
@@ -147,7 +147,7 @@
 
 <!-- ===================== OVERVIEW ===================== -->
 <section>
-  <h2>7-Day Learning Path</h2>
+  <h2>8-Day Learning Path</h2>
   <div class="two-col" style="text-align:left;">
     <div>
       <div class="card">📅 <strong>Day 1</strong> — JavaScript Fundamentals</div>
@@ -157,8 +157,9 @@
     </div>
     <div>
       <div class="card">📅 <strong>Day 5</strong> — React Data Flow &amp; Real-World Patterns</div>
-      <div class="card">📅 <strong>Day 6</strong> — TypeScript + Tailwind CSS</div>
-      <div class="card">📅 <strong>Day 7</strong> — React Router + React Query + Zustand</div>
+      <div class="card">📅 <strong>Day 6</strong> — Hooks Deep Dive, Error Handling &amp; Storage</div>
+      <div class="card">📅 <strong>Day 7</strong> — TypeScript + Tailwind CSS</div>
+      <div class="card">📅 <strong>Day 8</strong> — React Router + React Query + Zustand</div>
     </div>
   </div>
   <p class="muted" style="margin-top:16px;">Each session: concept slides → live demo → 🎯 challenge</p>
@@ -1356,6 +1357,556 @@ function SearchPage() {
 <!-- ===================== DAY 6 INTRO ===================== -->
 <section class="day-intro" data-background-gradient="linear-gradient(135deg, #1a1a2e, #16213e)">
   <div class="day-badge">DAY 6</div>
+  <h2>Hooks Deep Dive · Error Handling · Browser Storage</h2>
+  <div class="goal">Go beyond useState/useEffect — handle failures gracefully and persist state in the browser</div>
+  <div class="two-col" style="text-align:left; margin-top:10px;">
+    <div>
+      <p style="color:var(--accent); margin-bottom:8px;"><strong>More React Hooks</strong></p>
+      <ul>
+        <li><code class="inline">useRef</code> &amp; <code class="inline">useReducer</code></li>
+        <li><code class="inline">useCallback</code> &amp; <code class="inline">useMemo</code></li>
+        <li><code class="inline">useContext</code></li>
+        <li>Custom hooks</li>
+      </ul>
+    </div>
+    <div>
+      <p style="color:var(--accent); margin-bottom:8px;"><strong>Error Handling &amp; Storage</strong></p>
+      <ul>
+        <li>Component-level Error Boundaries</li>
+        <li>App-level error handling</li>
+        <li>localStorage &amp; sessionStorage</li>
+        <li>Cookies</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- useRef -->
+<section>
+  <h3><code class="inline">useRef</code> — Stable References</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">What it does</p>
+      <ul>
+        <li>Holds a mutable value that <strong>doesn't trigger re-renders</strong></li>
+        <li>Common uses: DOM node access, storing timers, previous values</li>
+      </ul>
+      <pre><code class="language-jsx" data-trim>
+function AutoFocus() {
+  const inputRef = useRef(null)
+
+  useEffect(() =&gt; {
+    inputRef.current.focus()
+  }, [])
+
+  return &lt;input ref={inputRef} /&gt;
+}
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Track a value without re-rendering</p>
+      <pre><code class="language-jsx" data-trim>
+function Timer() {
+  const timerIdRef = useRef(null)
+
+  const start = () =&gt; {
+    timerIdRef.current = setInterval(() =&gt; {
+      console.log("tick")
+    }, 1000)
+  }
+
+  const stop = () =&gt; {
+    clearInterval(timerIdRef.current)
+  }
+
+  return (
+    &lt;&gt;
+      &lt;button onClick={start}&gt;Start&lt;/button&gt;
+      &lt;button onClick={stop}&gt;Stop&lt;/button&gt;
+    &lt;/&gt;
+  )
+}
+      </code></pre>
+    </div>
+  </div>
+  <div class="analogy">Like a private field on a class — visible to the instance but not part of render output.</div>
+</section>
+
+<!-- useReducer -->
+<section>
+  <h3><code class="inline">useReducer</code> — Complex State Logic</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">When to use it</p>
+      <ul>
+        <li>State has multiple sub-values that update together</li>
+        <li>Next state depends on the previous state in non-trivial ways</li>
+        <li>You want Redux-style clarity without Redux</li>
+      </ul>
+      <pre><code class="language-jsx" data-trim>
+const initialState = { count: 0, step: 1 }
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "increment":
+      return { ...state, count: state.count + state.step }
+    case "reset":
+      return initialState
+    default:
+      return state
+  }
+}
+      </code></pre>
+    </div>
+    <div>
+      <pre><code class="language-jsx" data-trim>
+function Counter() {
+  const [state, dispatch] = useReducer(
+    reducer,
+    initialState
+  )
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Count: {state.count}&lt;/p&gt;
+      &lt;button
+        onClick={() =&gt; dispatch({ type: "increment" })}
+      &gt;
+        +{state.step}
+      &lt;/button&gt;
+      &lt;button
+        onClick={() =&gt; dispatch({ type: "reset" })}
+      &gt;
+        Reset
+      &lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+      </code></pre>
+      <div class="analogy">Reducer pattern = the same idea as Redux or a state machine in a backend service.</div>
+    </div>
+  </div>
+</section>
+
+<!-- useCallback & useMemo -->
+<section>
+  <h3><code class="inline">useCallback</code> &amp; <code class="inline">useMemo</code> — Performance Hooks</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;"><code class="inline">useCallback</code> — memoize a function</p>
+      <pre><code class="language-jsx" data-trim>
+// Without useCallback: new function ref on every render
+// → causes unnecessary child re-renders
+function Parent() {
+  const [count, setCount] = useState(0)
+
+  const handleClick = useCallback(() =&gt; {
+    console.log("clicked")
+  }, []) // deps: re-create only when these change
+
+  return &lt;Child onClick={handleClick} /&gt;
+}
+      </code></pre>
+      <p style="font-size:0.78em; color:var(--muted);">✅ Use when passing callbacks to memoized children (<code class="inline">React.memo</code>)</p>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;"><code class="inline">useMemo</code> — memoize a value</p>
+      <pre><code class="language-jsx" data-trim>
+function ProductList({ products, filter }) {
+  const filtered = useMemo(
+    () =&gt;
+      products.filter(p =&gt;
+        p.name.toLowerCase().includes(filter)
+      ),
+    [products, filter] // recompute only when these change
+  )
+
+  return filtered.map(p =&gt; &lt;ProductCard key={p.id} product={p} /&gt;)
+}
+      </code></pre>
+      <p style="font-size:0.78em; color:var(--muted);">✅ Use for expensive computations; skip for trivial ones — premature optimisation costs readability</p>
+    </div>
+  </div>
+</section>
+
+<!-- useContext -->
+<section>
+  <h3><code class="inline">useContext</code> — Avoid Prop Drilling</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Create &amp; provide context</p>
+      <pre><code class="language-jsx" data-trim>
+// 1. Create context
+const ThemeContext = createContext("light")
+
+// 2. Provide it high in the tree
+function App() {
+  const [theme, setTheme] = useState("dark")
+
+  return (
+    &lt;ThemeContext.Provider value={theme}&gt;
+      &lt;Toolbar /&gt;
+    &lt;/ThemeContext.Provider&gt;
+  )
+}
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Consume anywhere in the tree</p>
+      <pre><code class="language-jsx" data-trim>
+// 3. Consume anywhere — no props needed
+function Button() {
+  const theme = useContext(ThemeContext)
+
+  return (
+    &lt;button
+      className={
+        theme === "dark" ? "btn-dark" : "btn-light"
+      }
+    &gt;
+      Click me
+    &lt;/button&gt;
+  )
+}
+      </code></pre>
+      <div class="analogy">Like dependency injection — the parent "provides" a value, any descendant can "inject" it.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Custom Hooks -->
+<section>
+  <h3>Custom Hooks — Reusable Logic</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Why custom hooks?</p>
+      <ul>
+        <li>Extract stateful logic from components</li>
+        <li>Name starts with <code class="inline">use</code> so React applies hook rules</li>
+        <li>Composable — hooks can call other hooks</li>
+      </ul>
+      <pre><code class="language-jsx" data-trim>
+// useLocalStorage.js
+function useLocalStorage(key, initialValue) {
+  const [value, setValue] = useState(() =&gt; {
+    const stored = localStorage.getItem(key)
+    return stored ? JSON.parse(stored) : initialValue
+  })
+
+  const set = (newVal) =&gt; {
+    setValue(newVal)
+    localStorage.setItem(key, JSON.stringify(newVal))
+  }
+
+  return [value, set]
+}
+      </code></pre>
+    </div>
+    <div>
+      <pre><code class="language-jsx" data-trim>
+// useFetch.js
+function useFetch(url) {
+  const [data, setData]     = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError]   = useState(null)
+
+  useEffect(() =&gt; {
+    fetch(url)
+      .then(r =&gt; r.json())
+      .then(setData)
+      .catch(setError)
+      .finally(() =&gt; setLoading(false))
+  }, [url])
+
+  return { data, loading, error }
+}
+
+// Usage — clean, declarative
+function UserCard({ id }) {
+  const { data, loading } = useFetch(`/api/users/${id}`)
+  if (loading) return &lt;Spinner /&gt;
+  return &lt;p&gt;{data.name}&lt;/p&gt;
+}
+      </code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- Error Handling — Component Level -->
+<section>
+  <h3>Error Handling — Component Level</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Error Boundaries</p>
+      <ul>
+        <li>Catch JS errors in a <strong>subtree</strong> during render / lifecycle</li>
+        <li>Must be a <strong>class component</strong> (or use <code class="inline">react-error-boundary</code> library)</li>
+        <li>Renders a fallback UI instead of crashing the whole page</li>
+      </ul>
+      <pre><code class="language-jsx" data-trim>
+class ErrorBoundary extends React.Component {
+  state = { hasError: false }
+
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  componentDidCatch(error, info) {
+    // log to Sentry / DataDog here
+    console.error(error, info)
+  }
+
+  render() {
+    if (this.state.hasError)
+      return &lt;h2&gt;Something went wrong.&lt;/h2&gt;
+    return this.props.children
+  }
+}
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Usage &amp; <code class="inline">react-error-boundary</code></p>
+      <pre><code class="language-jsx" data-trim>
+// Wrap only the risky subtree
+&lt;ErrorBoundary fallback={&lt;p&gt;Widget failed&lt;/p&gt;}&gt;
+  &lt;WeatherWidget /&gt;
+&lt;/ErrorBoundary&gt;
+
+// ── react-error-boundary (recommended) ──
+import { ErrorBoundary } from "react-error-boundary"
+
+function Fallback({ error, resetErrorBoundary }) {
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Error: {error.message}&lt;/p&gt;
+      &lt;button onClick={resetErrorBoundary}&gt;Retry&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+
+&lt;ErrorBoundary FallbackComponent={Fallback}&gt;
+  &lt;RiskyComponent /&gt;
+&lt;/ErrorBoundary&gt;
+      </code></pre>
+      <div class="analogy">Like a try/catch around a section of the render tree — the rest of the page stays alive.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Error Handling — App Level -->
+<section>
+  <h3>Error Handling — App Level</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Root-level Error Boundary</p>
+      <pre><code class="language-jsx" data-trim>
+// main.jsx — wrap the entire app
+ReactDOM.createRoot(document.getElementById("root"))
+  .render(
+    &lt;ErrorBoundary FallbackComponent={GlobalErrorPage}&gt;
+      &lt;App /&gt;
+    &lt;/ErrorBoundary&gt;
+  )
+
+function GlobalErrorPage({ error, resetErrorBoundary }) {
+  return (
+    &lt;div style={{ padding: 40 }}&gt;
+      &lt;h1&gt;Oops — something broke&lt;/h1&gt;
+      &lt;pre&gt;{error.message}&lt;/pre&gt;
+      &lt;button onClick={resetErrorBoundary}&gt;
+        Reload app
+      &lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Async errors &amp; fetch failures</p>
+      <pre><code class="language-jsx" data-trim>
+// Error boundaries DON'T catch async errors.
+// Handle them in state:
+function UserProfile({ id }) {
+  const [error, setError] = useState(null)
+
+  useEffect(() =&gt; {
+    fetchUser(id).catch(setError)
+  }, [id])
+
+  if (error)
+    return (
+      &lt;div className="error-box"&gt;
+        {error.message}
+        &lt;button onClick={() =&gt; setError(null)}&gt;
+          Retry
+        &lt;/button&gt;
+      &lt;/div&gt;
+    )
+
+  return &lt;p&gt;...&lt;/p&gt;
+}
+      </code></pre>
+      <p style="font-size:0.78em; color:var(--muted); margin-top:6px;">💡 React Query handles async errors automatically with its <code class="inline">isError</code> / <code class="inline">error</code> state</p>
+    </div>
+  </div>
+</section>
+
+<!-- Browser Storage — Overview -->
+<section>
+  <h3>State Management in the Browser</h3>
+  <div class="two-col" style="font-size:0.9em;">
+    <div>
+      <div class="card" style="margin-bottom:12px;">
+        <p style="color:var(--accent); font-weight:bold; margin:0 0 6px;">localStorage</p>
+        <ul>
+          <li>Persists <strong>after the browser is closed</strong></li>
+          <li>Scoped to origin (domain + port)</li>
+          <li>~5 MB limit, string values only</li>
+          <li>Use for: theme, language, non-sensitive prefs</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p style="color:var(--accent); font-weight:bold; margin:0 0 6px;">sessionStorage</p>
+        <ul>
+          <li>Cleared when the <strong>tab is closed</strong></li>
+          <li>Same API as localStorage</li>
+          <li>Use for: wizard step data, temp form drafts</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <p style="color:var(--accent); font-weight:bold; margin:0 0 6px;">Cookies</p>
+        <ul>
+          <li>Sent with <strong>every HTTP request</strong> automatically</li>
+          <li>Expiry, domain, path, <code class="inline">HttpOnly</code>, <code class="inline">Secure</code> flags</li>
+          <li>Typically set by the server (<code class="inline">Set-Cookie</code>)</li>
+          <li>Use for: auth tokens (HttpOnly), session IDs</li>
+          <li>~4 KB limit per cookie</li>
+        </ul>
+      </div>
+      <div class="analogy" style="margin-top:12px;">localStorage/sessionStorage ≈ in-memory cache. Cookies ≈ session headers sent to your backend on every request.</div>
+    </div>
+  </div>
+</section>
+
+<!-- localStorage & sessionStorage code -->
+<section>
+  <h3><code class="inline">localStorage</code> &amp; <code class="inline">sessionStorage</code></h3>
+  <div class="two-col">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Basic API</p>
+      <pre><code class="language-javascript" data-trim>
+// ── localStorage ──
+localStorage.setItem("theme", "dark")
+const theme = localStorage.getItem("theme") // "dark"
+localStorage.removeItem("theme")
+localStorage.clear() // wipe everything
+
+// Store objects — must serialise/deserialise
+const user = { id: 1, name: "Alice" }
+localStorage.setItem("user", JSON.stringify(user))
+const stored = JSON.parse(localStorage.getItem("user"))
+
+// ── sessionStorage — identical API ──
+sessionStorage.setItem("step", "2")
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Custom hook pattern</p>
+      <pre><code class="language-jsx" data-trim>
+function useLocalStorage(key, defaultValue) {
+  const [value, setValue] = useState(() =&gt; {
+    try {
+      const item = localStorage.getItem(key)
+      return item ? JSON.parse(item) : defaultValue
+    } catch {
+      return defaultValue
+    }
+  })
+
+  const setStored = (newValue) =&gt; {
+    setValue(newValue)
+    localStorage.setItem(key, JSON.stringify(newValue))
+  }
+
+  return [value, setStored]
+}
+
+// Usage
+const [theme, setTheme] = useLocalStorage("theme", "light")
+      </code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- Cookies code -->
+<section>
+  <h3>Cookies in React</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Reading &amp; writing (client-side)</p>
+      <pre><code class="language-javascript" data-trim>
+// Set a cookie (expires in 7 days)
+document.cookie =
+  "token=abc123; max-age=604800; path=/; Secure; SameSite=Strict"
+
+// Read all cookies (raw string — parse manually)
+document.cookie
+// "token=abc123; theme=dark"
+
+// ── js-cookie library (recommended) ──
+import Cookies from "js-cookie"
+
+Cookies.set("token", "abc123", { expires: 7, secure: true })
+const token = Cookies.get("token")
+Cookies.remove("token")
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">HttpOnly cookies — set by server</p>
+      <pre><code class="language-javascript" data-trim>
+// Server sets (Node/Express example):
+res.cookie("session", token, {
+  httpOnly: true,  // JS can't read this — XSS safe
+  secure: true,    // HTTPS only
+  sameSite: "strict",
+  maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+})
+
+// Frontend just makes requests — browser attaches
+// the cookie automatically:
+fetch("/api/me", { credentials: "include" })
+      </code></pre>
+      <div class="card" style="font-size:0.78em; margin-top:10px;">
+        <strong style="color:var(--accent2);">⚠️ Security rule of thumb</strong><br/>
+        Auth tokens → <code class="inline">HttpOnly</code> cookie (server-controlled)<br/>
+        UI preferences → <code class="inline">localStorage</code> (client-controlled)
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Day 6 Challenge -->
+<section data-background-color="#0a0a0a">
+  <div class="challenge-badge">🧩 DAY 6 — PICK THE RIGHT TOOL</div>
+  <h3>Hooks, Errors &amp; Storage — Which would you use?</h3>
+  <p class="muted">For each scenario, pick the best option:</p>
+  <div style="text-align:left;">
+    <div class="card">1. Auto-focus an input field when a modal opens</div>
+    <div class="card">2. Avoid recalculating a filtered list on every keystroke</div>
+    <div class="card">3. Share the logged-in user object with components 5 levels deep</div>
+    <div class="card">4. Manage form state with <code class="inline">validate</code> / <code class="inline">submit</code> / <code class="inline">reset</code> actions</div>
+    <div class="card">5. Remember a user's dark-mode preference across browser restarts</div>
+    <div class="card">6. Store a session ID that the backend reads on every request</div>
+    <div class="card">7. Prevent a crashed widget from taking down the whole page</div>
+  </div>
+  <div class="challenge-tip">💬 1) useRef &nbsp;·&nbsp; 2) useMemo &nbsp;·&nbsp; 3) useContext &nbsp;·&nbsp; 4) useReducer &nbsp;·&nbsp; 5) localStorage &nbsp;·&nbsp; 6) HttpOnly cookie &nbsp;·&nbsp; 7) Error Boundary</div>
+</section>
+
+<!-- ===================== DAY 7 INTRO ===================== -->
+<section class="day-intro" data-background-gradient="linear-gradient(135deg, #1a1a2e, #16213e)">
+  <div class="day-badge">DAY 7</div>
   <h2>TypeScript + Tailwind CSS</h2>
   <div class="goal">Type-safe code and utility-first styling — two tools every frontend dev relies on</div>
   <div class="two-col" style="text-align:left; margin-top:10px;">
@@ -1519,7 +2070,7 @@ const handleChange = (e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; {
   </code></pre>
 </section>
 
-<!-- Tailwind CSS — continued from Day 6 -->
+<!-- Tailwind CSS — continued from Day 7 -->
 
 <section>
   <h3>Tailwind CSS</h3>
@@ -1647,9 +2198,9 @@ const handleChange = (e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; {
   </code></pre>
 </section>
 
-<!-- ===================== DAY 6 CHALLENGE ===================== -->
+<!-- ===================== DAY 7 CHALLENGE ===================== -->
 <section data-background-color="#0a0a0a">
-  <div class="challenge-badge">📝 DAY 6 — QUICK CHECK</div>
+  <div class="challenge-badge">📝 DAY 7 — QUICK CHECK</div>
   <h3>TypeScript + Tailwind — Spot &amp; Match</h3>
   <div class="two-col">
     <div>
@@ -1681,9 +2232,9 @@ greet({ name: "Alice", age: "30" })
   </div>
 </section>
 
-<!-- ===================== DAY 7 INTRO ===================== -->
+<!-- ===================== DAY 8 INTRO ===================== -->
 <section class="day-intro" data-background-gradient="linear-gradient(135deg, #1a1a2e, #16213e)">
-  <div class="day-badge">DAY 7</div>
+  <div class="day-badge">DAY 8</div>
   <h2>React Router + React Query + Zustand</h2>
   <div class="goal">Navigation, server state, and global UI state — the complete picture</div>
   <div class="two-col" style="text-align:left; margin-top:10px;">
@@ -1936,9 +2487,9 @@ function LoginForm() {
   </div>
 </section>
 
-<!-- ===================== DAY 7 CHALLENGE ===================== -->
+<!-- ===================== DAY 8 CHALLENGE ===================== -->
 <section data-background-color="#0a0a0a">
-  <div class="challenge-badge">🎯 DAY 7 — WHICH TOOL?</div>
+  <div class="challenge-badge">🎯 DAY 8 — WHICH TOOL?</div>
   <h3>React Router vs React Query vs Zustand vs useState</h3>
   <p class="muted">For each scenario — which tool would you reach for?</p>
   <div style="text-align:left;">
@@ -1964,6 +2515,7 @@ function LoginForm() {
     </div>
     <div>
       <div class="card">✅ Data fetching, project structure</div>
+      <div class="card">✅ Hooks deep dive, error handling &amp; browser storage</div>
       <div class="card">✅ TypeScript + Tailwind CSS</div>
       <div class="card">✅ React Router — navigation patterns</div>
       <div class="card">✅ React Query + Zustand — state management</div>
