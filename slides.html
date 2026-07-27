@@ -157,7 +157,7 @@
     </div>
     <div>
       <div class="card">📅 <strong>Day 5</strong> — React Data Flow &amp; Real-World Patterns</div>
-      <div class="card">📅 <strong>Day 6</strong> — Hooks Deep Dive, Error Handling &amp; Storage</div>
+      <div class="card">📅 <strong>Day 6</strong> — Hooks Deep Dive, Error Handling, Storage &amp; Workers</div>
       <div class="card">📅 <strong>Day 7</strong> — TypeScript + Tailwind CSS</div>
       <div class="card">📅 <strong>Day 8</strong> — React Router + React Query + Zustand</div>
     </div>
@@ -1357,8 +1357,8 @@ function SearchPage() {
 <!-- ===================== DAY 6 INTRO ===================== -->
 <section class="day-intro" data-background-gradient="linear-gradient(135deg, #1a1a2e, #16213e)">
   <div class="day-badge">DAY 6</div>
-  <h2>Hooks Deep Dive · Error Handling · Browser Storage</h2>
-  <div class="goal">Go beyond useState/useEffect — handle failures gracefully and persist state in the browser</div>
+  <h2>Hooks Deep Dive · Error Handling · Browser Storage · Workers</h2>
+  <div class="goal">Go beyond useState/useEffect — handle failures gracefully, persist state, and move heavy work off the main thread</div>
   <div class="two-col" style="text-align:left; margin-top:10px;">
     <div>
       <p style="color:var(--accent); margin-bottom:8px;"><strong>More React Hooks</strong></p>
@@ -1370,12 +1370,12 @@ function SearchPage() {
       </ul>
     </div>
     <div>
-      <p style="color:var(--accent); margin-bottom:8px;"><strong>Error Handling &amp; Storage</strong></p>
+      <p style="color:var(--accent); margin-bottom:8px;"><strong>Error Handling, Storage &amp; Workers</strong></p>
       <ul>
         <li>Component-level Error Boundaries</li>
         <li>App-level error handling</li>
-        <li>localStorage &amp; sessionStorage</li>
-        <li>Cookies</li>
+        <li>localStorage &amp; sessionStorage &amp; Cookies</li>
+        <li>Web Workers &amp; Service Workers</li>
       </ul>
     </div>
   </div>
@@ -1887,10 +1887,157 @@ fetch("/api/me", { credentials: "include" })
   </div>
 </section>
 
+<!-- Web Workers -->
+<section>
+  <h3>Web Workers — Off the Main Thread</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">What &amp; why</p>
+      <ul>
+        <li>JS is <strong>single-threaded</strong> — heavy work <em>blocks</em> the UI</li>
+        <li>Web Workers run in a <strong>separate thread</strong> with no DOM access</li>
+        <li>Communicate via <code class="inline">postMessage</code> / <code class="inline">onmessage</code></li>
+        <li>Use for: number crunching, image processing, parsing large payloads</li>
+      </ul>
+      <pre><code class="language-javascript" data-trim>
+// worker.js — runs in a separate thread
+self.onmessage = (e) => {
+  const result = heavyComputation(e.data)
+  self.postMessage(result)
+}
+
+function heavyComputation(data) {
+  // CPU-intensive work — won't freeze the UI
+  return data.reduce((sum, n) => sum + n, 0)
+}
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Using a worker in React</p>
+      <pre><code class="language-jsx" data-trim>
+// main thread / React component
+function DataProcessor({ dataset }) {
+  const [result, setResult] = useState(null)
+
+  useEffect(() => {
+    const worker = new Worker(
+      new URL("./worker.js", import.meta.url)
+    )
+
+    worker.onmessage = (e) => setResult(e.data)
+    worker.postMessage(dataset)
+
+    return () => worker.terminate() // cleanup
+  }, [dataset])
+
+  return result
+    ? &lt;p&gt;Sum: {result}&lt;/p&gt;
+    : &lt;p&gt;Calculating...&lt;/p&gt;
+}
+      </code></pre>
+      <div class="analogy">Like spinning up a goroutine or a thread pool task — offload the work, get a message back when done.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Service Workers -->
+<section>
+  <h3>Service Workers — Network Proxy in the Browser</h3>
+  <div class="two-col">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">What &amp; why</p>
+      <ul>
+        <li>A script that sits <strong>between the browser and the network</strong></li>
+        <li>Intercepts fetch requests — can serve from cache</li>
+        <li>Enables <strong>offline support</strong>, background sync, push notifications</li>
+        <li>Lifecycle: <code class="inline">install</code> → <code class="inline">activate</code> → <code class="inline">fetch</code></li>
+        <li>Runs in its own thread — no DOM access</li>
+      </ul>
+      <pre><code class="language-javascript" data-trim>
+// sw.js — service worker
+const CACHE = "app-v1"
+const ASSETS = ["/", "/index.html", "/app.js"]
+
+self.addEventListener("install", (e) => {
+  e.waitUntil(
+    caches.open(CACHE).then(c => c.addAll(ASSETS))
+  )
+})
+
+self.addEventListener("fetch", (e) => {
+  e.respondWith(
+    caches.match(e.request).then(
+      cached => cached || fetch(e.request)
+    )
+  )
+})
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Registering &amp; using in React (Vite / CRA)</p>
+      <pre><code class="language-javascript" data-trim>
+// main.jsx — register on load
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then(reg  => console.log("SW registered", reg))
+      .catch(err => console.error("SW failed",  err))
+  })
+}
+      </code></pre>
+      <div class="card" style="font-size:0.78em; margin-top:10px;">
+        <strong style="color:var(--accent2);">💡 In practice</strong><br/>
+        Most React projects use <strong>Vite PWA plugin</strong> or <strong>Workbox</strong> instead of hand-writing service workers — they auto-generate the caching strategy.
+      </div>
+      <div class="analogy" style="margin-top:10px;">Like a reverse proxy (nginx/Envoy) sitting in front of your app — intercepts requests and decides whether to hit the network or a local cache.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Web Worker vs Service Worker comparison -->
+<section>
+  <h3>Web Worker vs Service Worker — At a Glance</h3>
+  <div class="two-col" style="font-size:0.88em;">
+    <div>
+      <div class="card" style="margin-bottom:10px;">
+        <p style="color:var(--accent); font-weight:bold; margin:0 0 8px;">⚙️ Web Worker</p>
+        <ul>
+          <li>Scope: <strong>per page / component</strong></li>
+          <li>Purpose: CPU-intensive computation</li>
+          <li>Comms: <code class="inline">postMessage</code> ↔ main thread</li>
+          <li>Lifecycle: created &amp; terminated by the page</li>
+          <li>DOM access: ❌</li>
+          <li>Network intercept: ❌</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:10px;">
+        <p style="color:var(--accent); font-weight:bold; margin:0 0 8px;">🌐 Service Worker</p>
+        <ul>
+          <li>Scope: <strong>entire origin</strong></li>
+          <li>Purpose: offline caching, background sync, push</li>
+          <li>Comms: <code class="inline">postMessage</code> ↔ all controlled pages</li>
+          <li>Lifecycle: install / activate / idle / terminated by browser</li>
+          <li>DOM access: ❌</li>
+          <li>Network intercept: ✅ (fetch events)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="font-size:0.82em; margin-top:6px; text-align:left;">
+    <strong style="color:var(--accent2);">When to reach for each</strong><br/>
+    Heavy JSON parsing / sorting → <strong>Web Worker</strong> &nbsp;·&nbsp;
+    Offline-first app / PWA → <strong>Service Worker</strong> &nbsp;·&nbsp;
+    Push notifications → <strong>Service Worker</strong>
+  </div>
+</section>
+
 <!-- Day 6 Challenge -->
 <section data-background-color="#0a0a0a">
   <div class="challenge-badge">🧩 DAY 6 — PICK THE RIGHT TOOL</div>
-  <h3>Hooks, Errors &amp; Storage — Which would you use?</h3>
+  <h3>Hooks, Errors, Storage &amp; Workers — Which would you use?</h3>
   <p class="muted">For each scenario, pick the best option:</p>
   <div style="text-align:left;">
     <div class="card">1. Auto-focus an input field when a modal opens</div>
@@ -1900,8 +2047,10 @@ fetch("/api/me", { credentials: "include" })
     <div class="card">5. Remember a user's dark-mode preference across browser restarts</div>
     <div class="card">6. Store a session ID that the backend reads on every request</div>
     <div class="card">7. Prevent a crashed widget from taking down the whole page</div>
+    <div class="card">8. Run a large CSV parse without freezing the UI</div>
+    <div class="card">9. Make the app load instantly even when the user is offline</div>
   </div>
-  <div class="challenge-tip">💬 1) useRef &nbsp;·&nbsp; 2) useMemo &nbsp;·&nbsp; 3) useContext &nbsp;·&nbsp; 4) useReducer &nbsp;·&nbsp; 5) localStorage &nbsp;·&nbsp; 6) HttpOnly cookie &nbsp;·&nbsp; 7) Error Boundary</div>
+  <div class="challenge-tip">💬 1) useRef &nbsp;·&nbsp; 2) useMemo &nbsp;·&nbsp; 3) useContext &nbsp;·&nbsp; 4) useReducer &nbsp;·&nbsp; 5) localStorage &nbsp;·&nbsp; 6) HttpOnly cookie &nbsp;·&nbsp; 7) Error Boundary &nbsp;·&nbsp; 8) Web Worker &nbsp;·&nbsp; 9) Service Worker</div>
 </section>
 
 <!-- ===================== DAY 7 INTRO ===================== -->
