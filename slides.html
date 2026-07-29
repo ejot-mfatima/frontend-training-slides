@@ -99,6 +99,13 @@
       overflow: hidden;
       box-sizing: border-box;
     }
+    /* Prevent adjacent-slide bleed-through on sections that use
+       data-background-gradient (whose background lives in a separate
+       layer while the section itself is transparent by default) */
+    .reveal section.day-intro,
+    .reveal section.title-slide {
+      background-color: #1a1a2e;
+    }
     .reveal pre {
       margin: 5px auto !important;
       font-size: 0.73em;
