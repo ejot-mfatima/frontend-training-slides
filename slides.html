@@ -140,7 +140,7 @@
     <span class="tag">TypeScript</span>
     <span class="tag">Tailwind</span>
     <span class="tag">React Query</span>
-    <span class="tag">Zustand</span>
+    <span class="tag">React Router</span>
   </div>
   <p class="muted" style="margin-top:40px; font-style:italic;">"Start with the basics. Build from there."</p>
 </section>
@@ -159,7 +159,7 @@
       <div class="card">📅 <strong>Day 5</strong> — React Data Flow &amp; Real-World Patterns</div>
       <div class="card">📅 <strong>Day 6</strong> — Hooks Deep Dive, Error Handling, Storage &amp; Workers</div>
       <div class="card">📅 <strong>Day 7</strong> — TypeScript + Tailwind CSS</div>
-      <div class="card">📅 <strong>Day 8</strong> — React Router + React Query + Zustand</div>
+      <div class="card">📅 <strong>Day 8</strong> — React Router + React Query</div>
     </div>
   </div>
   <p class="muted" style="margin-top:16px;">Each session: concept slides → live demo → 🎯 challenge</p>
@@ -2384,29 +2384,27 @@ greet({ name: "Alice", age: "30" })
 <!-- ===================== DAY 8 INTRO ===================== -->
 <section class="day-intro" data-background-gradient="linear-gradient(135deg, #1a1a2e, #16213e)">
   <div class="day-badge">DAY 8</div>
-  <h2>React Router + React Query + Zustand</h2>
-  <div class="goal">Navigation, server state, and global UI state — the complete picture</div>
+  <h2>React Router + React Query</h2>
+  <div class="goal">Route protection, query params, sharing data across pages, and server state — without a global state library</div>
   <div class="two-col" style="text-align:left; margin-top:10px;">
     <div>
       <p style="color:var(--accent); margin-bottom:6px;"><strong>React Router</strong></p>
       <ul>
         <li>Recap: Routes, Route, Link</li>
         <li><code class="inline">useParams</code> &amp; <code class="inline">useNavigate</code></li>
-        <li>Protected routes pattern</li>
-      </ul>
-      <p style="color:var(--accent); margin:10px 0 6px;"><strong>React Query</strong></p>
-      <ul>
-        <li><code class="inline">useQuery</code> &amp; <code class="inline">useMutation</code></li>
-        <li>Caching &amp; invalidation</li>
+        <li>Public, Protected &amp; Private routes</li>
+        <li>Query params: <code class="inline">useSearchParams</code></li>
+        <li>Passing data between pages</li>
       </ul>
     </div>
     <div>
-      <p style="color:var(--accent); margin-bottom:6px;"><strong>Zustand</strong></p>
+      <p style="color:var(--accent); margin-bottom:6px;"><strong>React Query</strong></p>
       <ul>
-        <li>Creating a store</li>
-        <li>Reading &amp; updating state</li>
-        <li>When to use vs <code class="inline">useState</code></li>
+        <li><code class="inline">useQuery</code> &amp; <code class="inline">useMutation</code></li>
+        <li>Caching &amp; invalidation</li>
+        <li>Shared server state across pages</li>
       </ul>
+      <p style="color:var(--muted); font-size:0.8em; margin-top:12px;">📅 Global client state (Redux / Zustand) → Day 9</p>
     </div>
   </div>
 </section>
@@ -2433,6 +2431,23 @@ function App() {
 }
   </code></pre>
   <div class="analogy">Routes ≈ HTTP path handlers in your API router. <code class="inline">:id</code> is a URL path parameter.</div>
+</section>
+
+<section>
+  <h3>Route Types — Public, Protected, Private</h3>
+  <div class="card" style="margin-bottom:10px;">
+    <strong style="color:var(--accent)">Public</strong> — anyone can visit, even when not logged in<br/>
+    <span style="font-size:0.85em; color:#aaa;">e.g. <code class="inline">/</code>, <code class="inline">/about</code>, <code class="inline">/login</code>, <code class="inline">/register</code></span>
+  </div>
+  <div class="card" style="margin-bottom:10px;">
+    <strong style="color:var(--accent)">Protected</strong> — requires authentication; redirect to login if not logged in<br/>
+    <span style="font-size:0.85em; color:#aaa;">e.g. <code class="inline">/dashboard</code>, <code class="inline">/profile</code>, <code class="inline">/settings</code></span>
+  </div>
+  <div class="card" style="margin-bottom:10px;">
+    <strong style="color:var(--accent)">Public-only (guest)</strong> — redirect away if <em>already</em> logged in<br/>
+    <span style="font-size:0.85em; color:#aaa;">e.g. <code class="inline">/login</code>, <code class="inline">/register</code> — no point showing these to authenticated users</span>
+  </div>
+  <div class="analogy">Same pattern as auth middleware in your backend: check the token before the handler runs.</div>
 </section>
 
 <section>
@@ -2465,11 +2480,11 @@ function LoginForm() {
   <pre><code class="language-tsx" data-trim>
 import { Navigate } from "react-router-dom"
 
-// Wrapper that checks auth before rendering the route
+// useAuth() can be backed by Context, localStorage, or any store
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user } = useAuthStore()
+  const { isAuthenticated } = useAuth()
 
-  if (!user) return &lt;Navigate to="/login" replace /&gt;
+  if (!isAuthenticated) return &lt;Navigate to="/login" replace /&gt;
   return &lt;&gt;{children}&lt;/&gt;
 }
 
@@ -2479,13 +2494,116 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   &lt;Route path="/dashboard" element={
     &lt;ProtectedRoute&gt;&lt;Dashboard /&gt;&lt;/ProtectedRoute&gt;
   } /&gt;
+  &lt;Route path="/profile"   element={
+    &lt;ProtectedRoute&gt;&lt;Profile /&gt;&lt;/ProtectedRoute&gt;
+  } /&gt;
 &lt;/Routes&gt;
   </code></pre>
   <div class="analogy">Like auth middleware in Go/Express — intercept the request, check the token, continue or redirect.</div>
 </section>
 
 <section>
-  <h3>React Query — The Problem It Solves</h3>
+  <h3>Public-Only Routes (Redirect if Logged In)</h3>
+  <pre><code class="language-tsx" data-trim>
+// Redirect already-authenticated users away from /login or /register
+function GuestRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useAuth()
+
+  if (isAuthenticated) return &lt;Navigate to="/dashboard" replace /&gt;
+  return &lt;&gt;{children}&lt;/&gt;
+}
+
+// Usage
+&lt;Routes&gt;
+  &lt;Route path="/login"    element={
+    &lt;GuestRoute&gt;&lt;Login /&gt;&lt;/GuestRoute&gt;
+  } /&gt;
+  &lt;Route path="/register" element={
+    &lt;GuestRoute&gt;&lt;Register /&gt;&lt;/GuestRoute&gt;
+  } /&gt;
+  &lt;Route path="/dashboard" element={
+    &lt;ProtectedRoute&gt;&lt;Dashboard /&gt;&lt;/ProtectedRoute&gt;
+  } /&gt;
+&lt;/Routes&gt;
+  </code></pre>
+  <p class="muted" style="font-size:0.8em; margin-top:8px;">Combining both wrappers gives you clean, declarative access control over every route.</p>
+</section>
+
+<section>
+  <h3>Query Params — <code class="inline">useSearchParams</code></h3>
+  <pre><code class="language-tsx" data-trim>
+import { useSearchParams } from "react-router-dom"
+
+// URL: /products?category=shoes&page=2
+function ProductList() {
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const category = searchParams.get("category") // "shoes"
+  const page     = Number(searchParams.get("page") ?? 1)
+
+  const nextPage = () =&gt;
+    setSearchParams({ category, page: String(page + 1) })
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Category: {category} | Page: {page}&lt;/p&gt;
+      &lt;button onClick={nextPage}&gt;Next Page&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+  </code></pre>
+  <div class="analogy">Query strings are the URL <code class="inline">?key=value</code> pairs — same as query parameters in your REST API.</div>
+</section>
+
+<section>
+  <h3>Passing Data Between Pages</h3>
+  <div style="text-align:left; font-size:0.88em;">
+    <div class="card" style="margin-bottom:10px;">
+      <strong style="color:var(--accent)">1. URL params</strong> — <code class="inline">/users/:id</code> → read with <code class="inline">useParams()</code><br/>
+      <span style="color:#aaa; font-size:0.9em;">Best for: identity of the resource (user id, order id)</span>
+    </div>
+    <div class="card" style="margin-bottom:10px;">
+      <strong style="color:var(--accent)">2. Query strings</strong> — <code class="inline">/products?category=shoes&amp;page=2</code> → <code class="inline">useSearchParams()</code><br/>
+      <span style="color:#aaa; font-size:0.9em;">Best for: filters, pagination, tab state — shareable via URL</span>
+    </div>
+    <div class="card" style="margin-bottom:10px;">
+      <strong style="color:var(--accent)">3. Location state</strong> — <code class="inline">navigate('/confirm', &#123; state: &#123; order &#125; &#125;)</code> → <code class="inline">useLocation()</code><br/>
+      <span style="color:#aaa; font-size:0.9em;">Best for: transient data between two pages (not in URL, lost on refresh)</span>
+    </div>
+    <div class="card">
+      <strong style="color:var(--accent)">4. React Query cache</strong> — fetch once, read anywhere via <code class="inline">queryKey</code><br/>
+      <span style="color:#aaa; font-size:0.9em;">Best for: server data that multiple pages need (no prop drilling, no extra store)</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>Location State — <code class="inline">navigate</code> with Data</h3>
+  <pre><code class="language-tsx" data-trim>
+import { useNavigate, useLocation } from "react-router-dom"
+
+// Page A — pass state while navigating
+function OrderSummary({ order }) {
+  const navigate = useNavigate()
+
+  const confirm = () =&gt;
+    navigate("/order-confirmed", { state: { order } })
+
+  return &lt;button onClick={confirm}&gt;Confirm Order&lt;/button&gt;
+}
+
+// Page B — read the state
+function OrderConfirmed() {
+  const { state } = useLocation()
+  const order = state?.order  // { id: 42, total: 199 }
+
+  if (!order) return &lt;Navigate to="/" replace /&gt;  // guard: direct URL access
+
+  return &lt;h1&gt;Order #{order.id} confirmed! Total: ${order.total}&lt;/h1&gt;
+}
+  </code></pre>
+  <p class="muted" style="font-size:0.82em; margin-top:8px;">⚠️ Location state is lost on page refresh — use URL params or React Query for persistent data.</p>
+</section>
   <div class="two-col">
     <div>
       <p style="color:#ff6b6b; font-weight:bold;">Without React Query</p>
@@ -2564,74 +2682,27 @@ function CreateUser() {
 </section>
 
 <section>
-  <h3>Zustand — Global UI State</h3>
-  <div class="card" style="margin-bottom:16px; font-size:0.85em;">
-    <strong style="color:var(--accent)">When to use Zustand vs useState?</strong><br/>
-    Use <code class="inline">useState</code> for local, component-level state.<br/>
-    Use <strong>Zustand</strong> when multiple components across the tree need the same state.
-  </div>
-  <pre><code class="language-typescript" data-trim>
-import { create } from "zustand"
-
-interface AuthStore {
-  user:    User | null
-  token:   string | null
-  login:   (user: User, token: string) =&gt; void
-  logout:  () =&gt; void
-}
-
-const useAuthStore = create&lt;AuthStore&gt;((set) =&gt; ({
-  user:  null,
-  token: null,
-  login:  (user, token) =&gt; set({ user, token }),
-  logout: ()            =&gt; set({ user: null, token: null }),
-}))
-  </code></pre>
-</section>
-
-<section>
-  <h3>Zustand — Using the Store</h3>
-  <pre><code class="language-tsx" data-trim>
-// In any component — no Provider needed!
-function Navbar() {
-  const { user, logout } = useAuthStore()
-
-  return (
-    &lt;nav&gt;
-      &lt;span&gt;Hello, {user?.name}&lt;/span&gt;
-      &lt;button onClick={logout}&gt;Logout&lt;/button&gt;
-    &lt;/nav&gt;
-  )
-}
-
-function LoginForm() {
-  const login = useAuthStore((state) =&gt; state.login)
-
-  const handleLogin = async () =&gt; {
-    const { user, token } = await authApi.login(credentials)
-    login(user, token) // updates store → Navbar re-renders
-  }
-
-  return &lt;form onSubmit={handleLogin}&gt;...&lt;/form&gt;
-}
-  </code></pre>
-  <div class="analogy">Zustand store = a singleton service with reactive subscriptions — like a simple in-memory event bus.</div>
-</section>
-
-<section>
-  <h3>React Query vs Zustand — When to Use What</h3>
+  <h3>Choosing the Right Data Approach</h3>
   <div style="text-align:left;">
     <div class="card">
-      <strong style="color:var(--accent)">React Query</strong> — for <strong>server state</strong><br/>
-      <span style="font-size:0.85em; color:#aaa;">Data that comes from an API: users, products, orders. It has a source of truth on the server.</span>
+      <strong style="color:var(--accent)">URL params &amp; query strings</strong> — navigation / shareable state<br/>
+      <span style="font-size:0.85em; color:#aaa;">Resource identity, filters, pagination. Shareable via link, survives refresh.</span>
     </div>
     <div class="card">
-      <strong style="color:var(--accent)">Zustand</strong> — for <strong>client/UI state</strong><br/>
-      <span style="font-size:0.85em; color:#aaa;">Auth session, modal open/close, sidebar state, selected items. Lives only in the browser.</span>
+      <strong style="color:var(--accent)">React Query</strong> — server state<br/>
+      <span style="font-size:0.85em; color:#aaa;">Data from an API. Cached across components — no prop drilling, no extra store needed.</span>
     </div>
     <div class="card">
-      <strong style="color:var(--accent)">useState</strong> — for <strong>local component state</strong><br/>
-      <span style="font-size:0.85em; color:#aaa;">Form inputs, counters, toggles — state that only this component cares about.</span>
+      <strong style="color:var(--accent)">Location state</strong> — transient page-to-page data<br/>
+      <span style="font-size:0.85em; color:#aaa;">One-time data passed during navigation (e.g. a just-created order). Lost on refresh.</span>
+    </div>
+    <div class="card">
+      <strong style="color:var(--accent)">useState</strong> — local component state<br/>
+      <span style="font-size:0.85em; color:#aaa;">Form inputs, dropdowns, toggles — state only this component cares about.</span>
+    </div>
+    <div class="card" style="border-color: rgba(247,223,30,0.4);">
+      <strong style="color:var(--accent2)">Redux / Zustand</strong> — global client UI state <span style="color:var(--muted);">(→ Day 9)</span><br/>
+      <span style="font-size:0.85em; color:#aaa;">Auth session, cart, theme — client-only state shared across many components.</span>
     </div>
   </div>
 </section>
@@ -2639,17 +2710,17 @@ function LoginForm() {
 <!-- ===================== DAY 8 CHALLENGE ===================== -->
 <section data-background-color="#0a0a0a">
   <div class="challenge-badge">🎯 DAY 8 — WHICH TOOL?</div>
-  <h3>React Router vs React Query vs Zustand vs useState</h3>
+  <h3>React Router vs React Query vs useState vs Location State</h3>
   <p class="muted">For each scenario — which tool would you reach for?</p>
   <div style="text-align:left;">
-    <div class="card">1. Store the <strong>currently logged-in user</strong> so any component can access it</div>
-    <div class="card">2. <strong>Redirect to /dashboard</strong> after a successful login</div>
-    <div class="card">3. <strong>Fetch a list of products</strong> from the backend API with caching</div>
-    <div class="card">4. Track whether a <strong>dropdown is open or closed</strong> in a single component</div>
-    <div class="card">5. Read the <strong>:id from the URL</strong> to load a specific user’s profile</div>
-    <div class="card">6. <strong>Create a new order</strong> (POST request) and refresh the order list after</div>
+    <div class="card">1. <strong>Redirect to /dashboard</strong> after a successful login</div>
+    <div class="card">2. <strong>Fetch a list of products</strong> from the backend API with caching</div>
+    <div class="card">3. Track whether a <strong>dropdown is open or closed</strong> in a single component</div>
+    <div class="card">4. Read the <strong>:id from the URL</strong> to load a specific user's profile</div>
+    <div class="card">5. <strong>Filter products</strong> by category — the filter should be shareable as a link</div>
+    <div class="card">6. Pass a <strong>just-created order</strong> to a confirmation page without putting it in the URL</div>
   </div>
-  <div class="challenge-tip">💬 1) Zustand &nbsp; 2) React Router useNavigate &nbsp; 3) React Query useQuery &nbsp; 4) useState &nbsp; 5) React Router useParams &nbsp; 6) React Query useMutation</div>
+  <div class="challenge-tip">💬 1) useNavigate &nbsp; 2) React Query useQuery &nbsp; 3) useState &nbsp; 4) useParams &nbsp; 5) useSearchParams &nbsp; 6) navigate with location state → useLocation</div>
 </section>
 
 <!-- ===================== WRAP UP ===================== -->
@@ -2666,8 +2737,8 @@ function LoginForm() {
       <div class="card">✅ Data fetching, project structure</div>
       <div class="card">✅ Hooks deep dive, error handling &amp; browser storage</div>
       <div class="card">✅ TypeScript + Tailwind CSS</div>
-      <div class="card">✅ React Router — navigation patterns</div>
-      <div class="card">✅ React Query + Zustand — state management</div>
+      <div class="card">✅ React Router — navigation, protected/public routes, query params</div>
+      <div class="card">✅ React Query — server state, caching, mutations</div>
     </div>
   </div>
 </section>
@@ -2692,7 +2763,7 @@ function LoginForm() {
     <span class="tag">React</span>
     <span class="tag">Tailwind</span>
     <span class="tag">React Query</span>
-    <span class="tag">Zustand</span>
+    <span class="tag">React Router</span>
   </div>
 </section>
 
