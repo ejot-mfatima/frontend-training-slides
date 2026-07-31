@@ -163,7 +163,7 @@
       <div class="card">📅 <strong>Day 7</strong> — TypeScript + Tailwind CSS</div>
       <div class="card">📅 <strong>Day 8</strong> — React Router + React Query</div>
       <div class="card">📅 <strong>Day 9</strong> — Global State: Redux &amp; Zustand</div>
-      <div class="card" style="border-color:rgba(97,218,251,0.6); background:rgba(97,218,251,0.05);">📅 <strong>Day 10</strong> — Frontend Architecture (Monolith, MFE, SSR/CSR)</div>
+      <div class="card" style="border-color:rgba(97,218,251,0.6); background:rgba(97,218,251,0.05);">📅 <strong>Day 10</strong> — Zustand + Frontend Architecture (Monolith, MFE, SSR/CSR)</div>
     </div>
   </div>
   <p class="muted" style="margin-top:16px;">Each session: concept slides → live demo → 🎯 challenge</p>
@@ -2733,16 +2733,25 @@ function CreateUser() {
 <!-- ===================== DAY 10 ===================== -->
 <section class="day-intro" data-background-gradient="linear-gradient(135deg, #0d1117, #0f3460, #162032)">
   <div class="day-badge">DAY 10</div>
-  <h2>Frontend Architecture</h2>
-  <div class="goal">Understand how large frontend apps are structured and rendered — choose the right strategy for the right problem</div>
-  <div class="two-col" style="text-align:left; margin-top:14px;">
+  <h2>Zustand + Frontend Architecture</h2>
+  <div class="goal">Master global client state with Zustand, then understand how large apps are structured and rendered</div>
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; text-align:left; margin-top:14px; font-size:0.88em;">
+    <div>
+      <p style="color:var(--accent); margin-bottom:8px;"><strong>🗄️ Global State</strong></p>
+      <ul>
+        <li>Why Zustand?</li>
+        <li>Creating a store</li>
+        <li>Reading &amp; updating state</li>
+        <li>Async actions &amp; middleware</li>
+      </ul>
+    </div>
     <div>
       <p style="color:var(--accent); margin-bottom:8px;"><strong>🏗️ Architecture Patterns</strong></p>
       <ul>
         <li>Monolithic frontend</li>
         <li>Micro Frontends (MFE)</li>
-        <li>Webpack &amp; Module Federation</li>
-        <li>Composition &amp; integration strategies</li>
+        <li>Webpack Module Federation</li>
+        <li>When to choose each</li>
       </ul>
     </div>
     <div>
@@ -2754,6 +2763,194 @@ function CreateUser() {
         <li>When &amp; why to use each</li>
       </ul>
     </div>
+  </div>
+</section>
+
+<section>
+  <h3>Zustand — What &amp; Why</h3>
+  <div class="two-col" style="align-items:start;">
+    <div>
+      <p style="color:var(--accent); font-weight:bold; margin-bottom:8px;">What is Zustand?</p>
+      <div class="card">
+        A <strong>tiny (~1 kB)</strong>, fast, unopinionated global state manager for React.<br/>
+        <span style="color:#aaa; font-size:0.85em;">No providers. No reducers. No boilerplate.</span>
+      </div>
+      <pre style="margin-top:10px !important;"><code class="language-bash" data-trim>
+npm install zustand
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold; margin-bottom:8px;">Why not Context or Redux?</p>
+      <div class="card" style="border-color:rgba(255,100,100,0.4); font-size:0.84em;">
+        <strong style="color:#ff6b6b;">Context</strong> re-renders <em>all</em> consumers whenever any value changes — bad for performance at scale
+      </div>
+      <div class="card" style="border-color:rgba(255,100,100,0.4); font-size:0.84em; margin-top:8px;">
+        <strong style="color:#ff6b6b;">Redux</strong> requires actions, reducers, selectors, and a Provider — lots of ceremony for simple state
+      </div>
+      <div class="card" style="border-color:rgba(97,218,251,0.5); font-size:0.84em; margin-top:8px;">
+        <strong style="color:var(--accent);">Zustand</strong> — state lives <em>outside</em> React. Components only re-render when their selected slice changes
+      </div>
+    </div>
+  </div>
+  <div class="analogy">Zustand ≈ a simple in-memory cache your components subscribe to — no wiring, just import &amp; use.</div>
+</section>
+
+<section>
+  <h3>Zustand — Creating a Store</h3>
+  <pre><code class="language-ts" data-trim>
+import { create } from "zustand"
+
+interface CartState {
+  items:     { id: number; name: string; price: number }[]
+  total:     number
+  addItem:   (item: CartState["items"][number]) =&gt; void
+  removeItem:(id: number) =&gt; void
+  clearCart: () =&gt; void
+}
+
+export const useCartStore = create&lt;CartState&gt;((set) =&gt; ({
+  items: [],
+  total: 0,
+
+  addItem: (item) =&gt;
+    set((state) =&gt; ({
+      items: [...state.items, item],
+      total: state.total + item.price,
+    })),
+
+  removeItem: (id) =&gt;
+    set((state) =&gt; ({ items: state.items.filter((i) =&gt; i.id !== id) })),
+
+  clearCart: () =&gt; set({ items: [], total: 0 }),
+}))
+  </code></pre>
+  <p class="muted" style="font-size:0.8em; margin-top:6px;">State + actions live together in one <code class="inline">create()</code> call. No action types, no dispatch, no reducers.</p>
+</section>
+
+<section>
+  <h3>Zustand — Using the Store</h3>
+  <pre><code class="language-tsx" data-trim>
+import { useCartStore } from "./store"
+
+// Select only what you need — component only re-renders when THAT slice changes
+function CartBadge() {
+  const count = useCartStore((state) =&gt; state.items.length)
+  return &lt;span className="badge"&gt;{count}&lt;/span&gt;
+}
+
+// Use actions directly — no dispatch()
+function ProductCard({ product }) {
+  const addItem = useCartStore((state) =&gt; state.addItem)
+  return &lt;button onClick={() =&gt; addItem(product)}&gt;Add to Cart&lt;/button&gt;
+}
+
+// Read multiple slices at once
+function CartSummary() {
+  const items = useCartStore((state) =&gt; state.items)
+  const total = useCartStore((state) =&gt; state.total)
+  const clear = useCartStore((state) =&gt; state.clearCart)
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;{items.length} items — ${total.toFixed(2)}&lt;/p&gt;
+      &lt;button onClick={clear}&gt;Clear Cart&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+  </code></pre>
+  <div class="analogy">No Provider wrapping needed — any component anywhere just imports the hook and uses it.</div>
+</section>
+
+<section>
+  <h3>Zustand — Async Actions &amp; Middleware</h3>
+  <div class="two-col" style="font-size:0.82em; align-items:start;">
+    <div>
+      <p style="color:var(--accent); font-weight:bold; margin-bottom:6px;">Async Actions</p>
+      <pre style="margin:0 !important;"><code class="language-ts" data-trim>
+const useUserStore = create&lt;UserState&gt;((set) =&gt; ({
+  user:    null,
+  loading: false,
+  error:   null,
+
+  fetchUser: async (id: number) =&gt; {
+    set({ loading: true, error: null })
+    try {
+      const user = await api.getUser(id)
+      set({ user, loading: false })
+    } catch (err) {
+      set({ error: "Failed", loading: false })
+    }
+  },
+}))
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold; margin-bottom:6px;">Middleware</p>
+      <pre style="margin:0 !important;"><code class="language-ts" data-trim>
+import { devtools, persist } from "zustand/middleware"
+
+// DevTools — inspect in Redux DevTools browser extension
+const useStore = create(
+  devtools((set) =&gt; ({ ... }))
+)
+
+// Persist — save &amp; restore from localStorage
+const useStore = create(
+  persist(
+    (set) =&gt; ({ ... }),
+    { name: "cart-storage" }
+  )
+)
+
+// Combine both
+const useStore = create(
+  devtools(persist((set) =&gt; ({ ... }),
+    { name: "app-store" }))
+)
+      </code></pre>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>Zustand vs Context vs Redux vs React Query</h3>
+  <div style="font-size:0.8em; margin-top:10px;">
+    <table style="width:100%; border-collapse:collapse; text-align:left;">
+      <thead>
+        <tr style="border-bottom:2px solid rgba(97,218,251,0.4);">
+          <th style="padding:8px 12px; color:var(--accent);">Tool</th>
+          <th style="padding:8px 12px; color:var(--accent);">Best For</th>
+          <th style="padding:8px 12px; color:var(--accent);">When to Avoid</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.07); background:rgba(255,255,255,0.02);">
+          <td style="padding:8px 12px; color:var(--accent); font-weight:bold;">useState</td>
+          <td style="padding:8px 12px; color:#ccc;">Local UI state (toggles, inputs, dropdowns)</td>
+          <td style="padding:8px 12px; color:#aaa;">State shared across many components</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.07);">
+          <td style="padding:8px 12px; color:var(--accent); font-weight:bold;">Context</td>
+          <td style="padding:8px 12px; color:#ccc;">Static or rarely-changing global values (theme, locale, auth user)</td>
+          <td style="padding:8px 12px; color:#aaa;">High-frequency updates — causes cascade re-renders</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.07); background:rgba(255,255,255,0.02);">
+          <td style="padding:8px 12px; color:var(--accent2); font-weight:bold;">Zustand ⭐</td>
+          <td style="padding:8px 12px; color:#ccc;">Global client UI state — cart, notifications, user session, filters</td>
+          <td style="padding:8px 12px; color:#aaa;">Server data (use React Query instead)</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.07);">
+          <td style="padding:8px 12px; color:var(--accent); font-weight:bold;">React Query</td>
+          <td style="padding:8px 12px; color:#ccc;">Server state — fetching, caching, syncing with APIs</td>
+          <td style="padding:8px 12px; color:#aaa;">Pure client state with no API backing</td>
+        </tr>
+        <tr>
+          <td style="padding:8px 12px; color:#888; font-weight:bold;">Redux</td>
+          <td style="padding:8px 12px; color:#888;">Very large apps with complex state machines and time-travel debug needs</td>
+          <td style="padding:8px 12px; color:#888;">Most apps — Zustand covers 95% of Redux use cases with far less code</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </section>
 
