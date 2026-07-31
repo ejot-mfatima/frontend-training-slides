@@ -162,7 +162,7 @@
       <div class="card">📅 <strong>Day 6</strong> — Hooks Deep Dive, Error Handling, Storage &amp; Workers</div>
       <div class="card">📅 <strong>Day 7</strong> — TypeScript + Tailwind CSS</div>
       <div class="card">📅 <strong>Day 8</strong> — React Router + React Query</div>
-      <div class="card">📅 <strong>Day 9</strong> — Global State: Redux &amp; Zustand</div>
+      <div class="card">📅 <strong>Day 9</strong> — Redux Toolkit (Global State)</div>
       <div class="card" style="border-color:rgba(97,218,251,0.6); background:rgba(97,218,251,0.05);">📅 <strong>Day 10</strong> — Zustand + Frontend Architecture (Monolith, MFE, SSR/CSR)</div>
     </div>
   </div>
@@ -2730,6 +2730,259 @@ function CreateUser() {
   <div class="challenge-tip">💬 1) useNavigate &nbsp; 2) React Query useQuery &nbsp; 3) useState &nbsp; 4) useParams &nbsp; 5) useSearchParams &nbsp; 6) navigate with location state → useLocation</div>
 </section>
 
+<!-- ===================== DAY 9 INTRO ===================== -->
+<section class="day-intro" data-background-gradient="linear-gradient(135deg, #1a1a2e, #16213e)">
+  <div class="day-badge">DAY 9</div>
+  <h2>Redux</h2>
+  <div class="goal">Understand Redux fundamentals and implement global state with Redux Toolkit</div>
+  <div class="two-col" style="text-align:left; margin-top:10px;">
+    <div>
+      <p style="color:var(--accent); margin-bottom:6px;"><strong>Agenda</strong></p>
+      <ul>
+        <li>What, why, when to use Redux</li>
+        <li>Redux libraries and tools</li>
+        <li>Redux basics: store, actions, reducers</li>
+        <li>Thunk vs Saga for async flows</li>
+        <li>Quick check and recap</li>
+      </ul>
+    </div>
+    <div>
+      <p style="color:var(--accent); margin-bottom:6px;"><strong>Outcomes</strong></p>
+      <ul>
+        <li>Explain Redux architecture clearly</li>
+        <li>Choose Redux only when it is the right fit</li>
+        <li>Build a slice with actions + reducer logic</li>
+        <li>Decide between Thunk and Saga by use case</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>What is Redux?</h3>
+  <div class="card" style="text-align:left;">
+    <strong style="color:var(--accent)">Redux is a predictable state container for JavaScript apps.</strong><br/>
+    <span style="font-size:0.9em; color:#aaa;">It keeps shared application state in one central store and updates it through explicit actions handled by reducers.</span>
+  </div>
+  <div class="two-col" style="text-align:left; margin-top:10px;">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Core pieces</p>
+      <ul>
+        <li><strong>Store</strong> → holds global state</li>
+        <li><strong>Action</strong> → describes "what happened"</li>
+        <li><strong>Reducer</strong> → calculates next state</li>
+      </ul>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Rules</p>
+      <ul>
+        <li>Single source of truth</li>
+        <li>Read state, dispatch actions</li>
+        <li>Predictable state transitions</li>
+      </ul>
+    </div>
+  </div>
+  <div class="analogy">Like backend event handling: event comes in, deterministic handler updates state.</div>
+</section>
+
+<section>
+  <h3>Why Should I Use Redux?</h3>
+  <div style="text-align:left;">
+    <div class="card"><strong style="color:var(--accent)">Shared state across many components</strong><br/><span style="font-size:0.85em; color:#aaa;">Avoid deep prop drilling for cart, auth, preferences, and workflow state.</span></div>
+    <div class="card"><strong style="color:var(--accent)">Predictable updates</strong><br/><span style="font-size:0.85em; color:#aaa;">State changes are traceable via actions, which helps debugging and collaboration.</span></div>
+    <div class="card"><strong style="color:var(--accent)">Scalable structure</strong><br/><span style="font-size:0.85em; color:#aaa;">Slices and clear boundaries keep large frontend codebases maintainable.</span></div>
+    <div class="card"><strong style="color:var(--accent)">Great DevTools</strong><br/><span style="font-size:0.85em; color:#aaa;">Time-travel debugging and action inspection improve developer productivity.</span></div>
+  </div>
+</section>
+
+<section>
+  <h3>When Should I Use Redux?</h3>
+  <div style="text-align:left;">
+    <div class="card"><strong style="color:var(--accent)">Use Redux when:</strong><br/><span style="font-size:0.85em; color:#aaa;">State is global, frequently updated, and used by many unrelated parts of the UI.</span></div>
+    <div class="card"><strong style="color:var(--accent)">Prefer local state when:</strong><br/><span style="font-size:0.85em; color:#aaa;">State belongs to one component (modals, input fields, small toggles).</span></div>
+    <div class="card"><strong style="color:var(--accent)">Prefer React Query for:</strong><br/><span style="font-size:0.85em; color:#aaa;">Server state: fetching, caching, background refetch, and invalidation.</span></div>
+  </div>
+  <div class="analogy">Use Redux for client state orchestration, not as the default replacement for every state tool.</div>
+</section>
+
+<section>
+  <h3>Redux Libraries and Tools</h3>
+  <div style="text-align:left;">
+    <div class="card"><strong style="color:var(--accent)">redux</strong> — core library (store + reducers + actions)</div>
+    <div class="card"><strong style="color:var(--accent)">react-redux</strong> — React bindings (<code class="inline">Provider</code>, <code class="inline">useSelector</code>, <code class="inline">useDispatch</code>)</div>
+    <div class="card"><strong style="color:var(--accent2)">@reduxjs/toolkit (RTK)</strong> — official, recommended way to write Redux</div>
+    <div class="card"><strong style="color:var(--accent)">Redux DevTools</strong> — inspect actions and state transitions</div>
+    <div class="card"><strong style="color:var(--accent)">redux-thunk / redux-saga</strong> — middleware for async side effects</div>
+  </div>
+</section>
+
+<section>
+  <h3>Redux Toolkit</h3>
+  <div class="two-col" style="text-align:left;">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Why RTK?</p>
+      <ul>
+        <li>Less boilerplate than classic Redux</li>
+        <li><code class="inline">createSlice</code> auto-generates actions + reducer</li>
+        <li>Built-in immutable updates via Immer</li>
+        <li><code class="inline">configureStore</code> with good defaults</li>
+      </ul>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Recommendation</p>
+      <div class="card">For new projects, start with Redux Toolkit first. Use plain Redux APIs only when you have a specific reason.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>Redux Basics</h3>
+  <pre><code class="language-ts" data-trim>
+// Action
+{ type: "cart/addItem", payload: { id: 101 } }
+
+// Reducer (pure function)
+function cartReducer(state, action) {
+  if (action.type === "cart/addItem") {
+    return { ...state, count: state.count + 1 }
+  }
+  return state
+}
+
+// Store
+const store = configureStore({ reducer: { cart: cartReducer } })
+  </code></pre>
+  <div class="analogy">Think: HTTP request hits controller; controller applies logic and returns the next state.</div>
+</section>
+
+<section>
+  <h3>Store, Actions, Reducers (RTK Example)</h3>
+  <pre><code class="language-tsx" data-trim>
+import { configureStore, createSlice } from "@reduxjs/toolkit"
+
+const cartSlice = createSlice({
+  name: "cart",
+  initialState: { items: [] as { id: number; qty: number }[] },
+  reducers: {
+    addItem: (state, action) =&gt; {
+      const existing = state.items.find(i =&gt; i.id === action.payload.id)
+      if (existing) existing.qty += 1
+      else state.items.push({ id: action.payload.id, qty: 1 })
+    },
+    clearCart: (state) =&gt; { state.items = [] }
+  }
+})
+
+export const { addItem, clearCart } = cartSlice.actions
+export const store = configureStore({ reducer: { cart: cartSlice.reducer } })
+  </code></pre>
+</section>
+
+<section>
+  <h3>Using Store Data in Components</h3>
+  <pre><code class="language-tsx" data-trim>
+import { Provider, useDispatch, useSelector } from "react-redux"
+import { store, addItem, clearCart } from "./store"
+type RootState = ReturnType&lt;typeof store.getState&gt;
+
+function CartSummary() {
+  const totalQty = useSelector((s: RootState) =&gt;
+    s.cart.items.reduce((sum, item) =&gt; sum + item.qty, 0)
+  )
+  return &lt;p&gt;Items in cart: {totalQty}&lt;/p&gt;
+}
+
+function ProductCard({ id }: { id: number }) {
+  const dispatch = useDispatch()
+  return (
+    &lt;button onClick={() =&gt; dispatch(addItem({ id }))}&gt;Add to cart&lt;/button&gt;
+  )
+}
+
+function App() {
+  return (
+    &lt;Provider store={store}&gt;
+      &lt;CartSummary /&gt;
+      &lt;ProductCard id={101} /&gt;
+      &lt;button onClick={() =&gt; dispatch(clearCart())}&gt;Clear&lt;/button&gt;
+    &lt;/Provider&gt;
+  )
+}
+  </code></pre>
+</section>
+
+<section>
+  <h3>Thunk &amp; Saga</h3>
+  <div class="two-col" style="text-align:left;">
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Thunk</p>
+      <ul>
+        <li>Best default for most apps</li>
+        <li>Simple async logic using functions</li>
+        <li>Great with Redux Toolkit</li>
+      </ul>
+      <pre><code class="language-ts" data-trim style="font-size:0.62em;">
+dispatch(fetchProfile()) // createAsyncThunk
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent); font-weight:bold;">Saga</p>
+      <ul>
+        <li>Better for complex workflows</li>
+        <li>Advanced orchestration/cancellation/retries</li>
+        <li>Generator-based effects model</li>
+      </ul>
+      <pre><code class="language-ts" data-trim style="font-size:0.62em;">
+yield takeLatest("user/fetchRequested", fetchUserSaga)
+      </code></pre>
+    </div>
+  </div>
+  <div class="challenge-tip">Rule of thumb: start with Thunk; move to Saga only if async flows become hard to manage.</div>
+</section>
+
+<section>
+  <h3>Async with Thunk (Redux Toolkit)</h3>
+  <pre><code class="language-tsx" data-trim>
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+
+export const fetchProfile = createAsyncThunk(
+  "user/fetchProfile",
+  async () =&gt; fetch("/api/profile").then(r =&gt; r.json())
+)
+
+const userSlice = createSlice({
+  name: "user",
+  initialState: { profile: null, status: "idle" },
+  reducers: {},
+  extraReducers: (builder) =&gt; {
+    builder
+      .addCase(fetchProfile.pending,   (state) =&gt; { state.status = "loading" })
+      .addCase(fetchProfile.fulfilled, (state, action) =&gt; {
+        state.status = "succeeded"
+        state.profile = action.payload
+      })
+      .addCase(fetchProfile.rejected,  (state) =&gt; { state.status = "failed" })
+  }
+})
+  </code></pre>
+  <div class="analogy">Thunk status mirrors API request lifecycle states in backend logs: pending → fulfilled/rejected.</div>
+</section>
+
+<!-- ===================== DAY 9 CHALLENGE ===================== -->
+<section data-background-color="#0a0a0a">
+  <div class="challenge-badge">🎯 DAY 9 — QUICK CHECK</div>
+  <h3>Redux — Final Check</h3>
+  <p class="muted">Answer in one line each:</p>
+  <div style="text-align:left;">
+    <div class="card">1. What is Redux in one sentence?</div>
+    <div class="card">2. One strong reason to use Redux in a team project?</div>
+    <div class="card">3. One case where you should <em>not</em> use Redux?</div>
+    <div class="card">4. Name the three core Redux pieces.</div>
+    <div class="card">5. Thunk vs Saga: when would you pick Saga?</div>
+  </div>
+  <div class="challenge-tip">💬 Expected: predictable store, shared state, local state exception, store/actions/reducers, Saga for complex async orchestration.</div>
+</section>
+
 <!-- ===================== DAY 10 ===================== -->
 <section class="day-intro" data-background-gradient="linear-gradient(135deg, #0d1117, #0f3460, #162032)">
   <div class="day-badge">DAY 10</div>
@@ -3470,6 +3723,7 @@ function App() {
       <div class="card">✅ TypeScript + Tailwind CSS</div>
       <div class="card">✅ React Router — navigation, protected/public routes, query params</div>
       <div class="card">✅ React Query — server state, caching, mutations</div>
+      <div class="card">✅ Redux Toolkit — global client UI state with predictable updates</div>
       <div class="card" style="border-color:rgba(97,218,251,0.6); background:rgba(97,218,251,0.05);">✅ Frontend Architecture — Monolith, Micro Frontends, Webpack Module Federation, CSR/SSR/SSG</div>
     </div>
   </div>
