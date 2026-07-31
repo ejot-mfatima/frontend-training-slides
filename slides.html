@@ -131,7 +131,7 @@
 <section class="title-slide" data-background-gradient="linear-gradient(135deg, #0f0c29, #302b63, #24243e)">
   <h1>Frontend Kickstart</h1>
   <p style="color:var(--accent); font-size:1.1em; margin-top:8px; letter-spacing:1px;">Getting Started with Frontend Development</p>
-  <p style="color:#aaa; margin-top:16px;">8-day learning path — 1 hour per session</p>
+  <p style="color:#aaa; margin-top:16px;">10-day learning path — 1 hour per session</p>
   <div style="margin-top:30px;">
     <span class="tag">JavaScript</span>
     <span class="tag">DOM</span>
@@ -141,25 +141,29 @@
     <span class="tag">Tailwind</span>
     <span class="tag">React Query</span>
     <span class="tag">React Router</span>
+    <span class="tag">Microfrontends</span>
+    <span class="tag">SSR / CSR</span>
   </div>
   <p class="muted" style="margin-top:40px; font-style:italic;">"Start with the basics. Build from there."</p>
 </section>
 
 <!-- ===================== OVERVIEW ===================== -->
 <section>
-  <h2>8-Day Learning Path</h2>
+  <h2>10-Day Learning Path</h2>
   <div class="two-col" style="text-align:left;">
     <div>
       <div class="card">📅 <strong>Day 1</strong> — JavaScript Fundamentals</div>
       <div class="card">📅 <strong>Day 2</strong> — The Browser &amp; the DOM</div>
       <div class="card">📅 <strong>Day 3</strong> — Modern JS &amp; ES6+ Patterns</div>
       <div class="card">📅 <strong>Day 4</strong> — React Core Concepts</div>
+      <div class="card">📅 <strong>Day 5</strong> — React Data Flow &amp; Real-World Patterns</div>
     </div>
     <div>
-      <div class="card">📅 <strong>Day 5</strong> — React Data Flow &amp; Real-World Patterns</div>
       <div class="card">📅 <strong>Day 6</strong> — Hooks Deep Dive, Error Handling, Storage &amp; Workers</div>
       <div class="card">📅 <strong>Day 7</strong> — TypeScript + Tailwind CSS</div>
       <div class="card">📅 <strong>Day 8</strong> — React Router + React Query</div>
+      <div class="card">📅 <strong>Day 9</strong> — Global State: Redux &amp; Zustand</div>
+      <div class="card" style="border-color:rgba(97,218,251,0.6); background:rgba(97,218,251,0.05);">📅 <strong>Day 10</strong> — Frontend Architecture (Monolith, MFE, SSR/CSR)</div>
     </div>
   </div>
   <p class="muted" style="margin-top:16px;">Each session: concept slides → live demo → 🎯 challenge</p>
@@ -2726,6 +2730,533 @@ function CreateUser() {
   <div class="challenge-tip">💬 1) useNavigate &nbsp; 2) React Query useQuery &nbsp; 3) useState &nbsp; 4) useParams &nbsp; 5) useSearchParams &nbsp; 6) navigate with location state → useLocation</div>
 </section>
 
+<!-- ===================== DAY 10 ===================== -->
+<section class="day-intro" data-background-gradient="linear-gradient(135deg, #0d1117, #0f3460, #162032)">
+  <div class="day-badge">DAY 10</div>
+  <h2>Frontend Architecture</h2>
+  <div class="goal">Understand how large frontend apps are structured and rendered — choose the right strategy for the right problem</div>
+  <div class="two-col" style="text-align:left; margin-top:14px;">
+    <div>
+      <p style="color:var(--accent); margin-bottom:8px;"><strong>🏗️ Architecture Patterns</strong></p>
+      <ul>
+        <li>Monolithic frontend</li>
+        <li>Micro Frontends (MFE)</li>
+        <li>Webpack &amp; Module Federation</li>
+        <li>Composition &amp; integration strategies</li>
+      </ul>
+    </div>
+    <div>
+      <p style="color:var(--accent); margin-bottom:8px;"><strong>⚡ Rendering Strategies</strong></p>
+      <ul>
+        <li>Client-Side Rendering (CSR)</li>
+        <li>Server-Side Rendering (SSR)</li>
+        <li>Static Site Generation (SSG)</li>
+        <li>When &amp; why to use each</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>Why Frontend Architecture Matters</h3>
+  <div class="two-col" style="align-items:start;">
+    <div>
+      <p style="color:var(--accent); font-weight:bold; margin-bottom:8px;">Small Team (1–5 devs)</p>
+      <div class="card" style="border-color:rgba(97,218,251,0.5);">
+        One repo → one app → one deploy<br/>
+        <span style="color:#aaa; font-size:0.85em;">Simple, fast to ship, easy to reason about</span>
+      </div>
+      <div style="text-align:center; font-size:2em; margin:14px 0;">✅</div>
+      <ul style="font-size:0.85em;">
+        <li>Shared components &amp; styles</li>
+        <li>One CI/CD pipeline</li>
+        <li>Quick onboarding</li>
+      </ul>
+    </div>
+    <div>
+      <p style="color:var(--accent2); font-weight:bold; margin-bottom:8px;">Large Org (10+ teams)</p>
+      <div class="card" style="border-color:rgba(255,100,100,0.5);">
+        Teams block each other · 20-min builds<br/>
+        Risky deploys · Conflicting dependencies<br/>
+        <span style="color:#aaa; font-size:0.85em;">One monorepo no longer scales</span>
+      </div>
+      <div style="text-align:center; font-size:2em; margin:14px 0;">⚠️</div>
+      <ul style="font-size:0.85em; color:#ccc;">
+        <li>Team A waits on Team B to deploy</li>
+        <li>One bug = redeploy everything</li>
+        <li>Can't upgrade dependencies independently</li>
+      </ul>
+    </div>
+  </div>
+  <div class="analogy">Just like backend monoliths evolved into microservices — the same forces push large frontend teams toward Micro Frontends.</div>
+</section>
+
+<section>
+  <h3>Monolithic Frontend</h3>
+  <p style="color:#aaa; font-size:0.85em; margin-bottom:14px;">One codebase · One build pipeline · One deployment unit</p>
+  <div style="border:2px solid rgba(97,218,251,0.35); border-radius:14px; padding:20px; margin:0 auto; max-width:820px; background:rgba(97,218,251,0.03);">
+    <div style="color:var(--accent); font-size:0.82em; margin-bottom:14px; font-weight:bold; text-align:center;">📦 Single React Application — one-portal.company.com</div>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:16px;">
+      <div style="background:rgba(97,218,251,0.1); border:1px solid rgba(97,218,251,0.35); border-radius:8px; padding:12px; text-align:center; font-size:0.8em;">🏠<br/>Home</div>
+      <div style="background:rgba(97,218,251,0.1); border:1px solid rgba(97,218,251,0.35); border-radius:8px; padding:12px; text-align:center; font-size:0.8em;">👤<br/>Users</div>
+      <div style="background:rgba(97,218,251,0.1); border:1px solid rgba(97,218,251,0.35); border-radius:8px; padding:12px; text-align:center; font-size:0.8em;">📦<br/>Orders</div>
+      <div style="background:rgba(97,218,251,0.1); border:1px solid rgba(97,218,251,0.35); border-radius:8px; padding:12px; text-align:center; font-size:0.8em;">⚙️<br/>Admin</div>
+    </div>
+    <div style="text-align:center; color:#aaa; font-size:0.8em; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
+      One build → <code class="inline">bundle.js</code> → Deployed to one server / CDN
+    </div>
+  </div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; font-size:0.84em;">
+    <div class="card" style="border-color:rgba(97,218,251,0.4);">✅ Simple to start &amp; onboard<br/>✅ Easy to share code &amp; styles<br/>✅ One CI/CD, one deploy</div>
+    <div class="card" style="border-color:rgba(255,100,100,0.4);">❌ Build slows as app grows<br/>❌ Teams block each other<br/>❌ One bug = full redeploy</div>
+  </div>
+</section>
+
+<section>
+  <h3>Monolith at Scale — Pain Points</h3>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; text-align:left; margin-top:12px;">
+    <div class="card" style="border-color:rgba(255,100,100,0.5);">
+      <p style="color:#ff6b6b; font-weight:bold; margin:0 0 6px;">🐌 Slow Builds</p>
+      <p style="color:#ccc; font-size:0.85em; margin:0;">Webpack bundle grows to 10 MB+. CI takes 20+ minutes. Every developer waits.</p>
+    </div>
+    <div class="card" style="border-color:rgba(255,100,100,0.5);">
+      <p style="color:#ff6b6b; font-weight:bold; margin:0 0 6px;">🚦 Team Conflicts</p>
+      <p style="color:#ccc; font-size:0.85em; margin:0;">Team A can't deploy until Team B's half-finished feature is ready. Daily merge conflicts.</p>
+    </div>
+    <div class="card" style="border-color:rgba(255,100,100,0.5);">
+      <p style="color:#ff6b6b; font-weight:bold; margin:0 0 6px;">🔒 Tech Lock-in</p>
+      <p style="color:#ccc; font-size:0.85em; margin:0;">Stuck on React 17 because one legacy widget won't upgrade. Can't experiment with new tools.</p>
+    </div>
+    <div class="card" style="border-color:rgba(255,100,100,0.5);">
+      <p style="color:#ff6b6b; font-weight:bold; margin:0 0 6px;">💥 Risky Deploys</p>
+      <p style="color:#ccc; font-size:0.85em; margin:0;">A CSS tweak in the admin panel triggers a full redeploy of every feature. Rollback is painful.</p>
+    </div>
+  </div>
+  <div class="analogy">This is exactly why backends moved from monoliths to microservices — the same scaling forces apply to large frontend teams.</div>
+</section>
+
+<section>
+  <h3>Micro Frontends — The Idea</h3>
+  <p style="color:#aaa; font-size:0.88em; margin-bottom:14px;"><em>"Apply microservices thinking to the frontend UI"</em></p>
+  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px; font-size:0.84em; margin-bottom:16px;">
+    <div class="card" style="border-color:rgba(97,218,251,0.5); text-align:center; padding:18px 12px;">
+      <div style="font-size:1.8em; margin-bottom:8px;">🏗️</div>
+      <strong style="color:var(--accent); display:block; margin-bottom:6px;">Independent Teams</strong>
+      <span style="color:#aaa;">Each team owns, builds &amp; deploys their slice of the UI end-to-end</span>
+    </div>
+    <div class="card" style="border-color:rgba(97,218,251,0.5); text-align:center; padding:18px 12px;">
+      <div style="font-size:1.8em; margin-bottom:8px;">🚀</div>
+      <strong style="color:var(--accent); display:block; margin-bottom:6px;">Independent Deploys</strong>
+      <span style="color:#aaa;">Ship the Cart team's code without touching the Home team's codebase</span>
+    </div>
+    <div class="card" style="border-color:rgba(97,218,251,0.5); text-align:center; padding:18px 12px;">
+      <div style="font-size:1.8em; margin-bottom:8px;">🔧</div>
+      <strong style="color:var(--accent); display:block; margin-bottom:6px;">Tech Freedom</strong>
+      <span style="color:#aaa;">One MFE uses React 18, another Vue 3 — the shell composes them without caring</span>
+    </div>
+  </div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:0.84em;">
+    <div class="card">
+      <strong style="color:var(--accent2);">Build-time Integration</strong><br/>
+      <span style="color:#aaa;">MFE published as npm package. Host installs it. Simple — but teams still need coordinated releases.</span>
+    </div>
+    <div class="card">
+      <strong style="color:var(--accent2);">Runtime Integration ⭐</strong><br/>
+      <span style="color:#aaa;">Shell loads MFEs dynamically via <strong>Webpack Module Federation</strong> — truly independent deploys.</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>Micro Frontend Architecture — Diagram</h3>
+  <div style="border:2px solid rgba(97,218,251,0.3); border-radius:14px; padding:20px 24px; margin:10px auto; max-width:900px; background:rgba(97,218,251,0.025);">
+    <div style="text-align:center; color:var(--accent); font-weight:bold; margin-bottom:16px; font-size:0.88em;">🐚 Shell / Host App — portal.company.com</div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:16px;">
+      <div style="border:2px solid rgba(247,223,30,0.5); border-radius:10px; padding:14px; text-align:center; background:rgba(247,223,30,0.04);">
+        <div style="color:var(--accent2); font-weight:bold; font-size:0.85em;">MFE: Home</div>
+        <div style="color:#aaa; font-size:0.78em; margin-top:4px;">Team Alpha · React 18</div>
+        <div style="color:#555; font-size:0.7em; margin-top:8px; font-family:monospace;">home.company.com<br/>remoteEntry.js</div>
+      </div>
+      <div style="border:2px solid rgba(247,223,30,0.5); border-radius:10px; padding:14px; text-align:center; background:rgba(247,223,30,0.04);">
+        <div style="color:var(--accent2); font-weight:bold; font-size:0.85em;">MFE: Orders</div>
+        <div style="color:#aaa; font-size:0.78em; margin-top:4px;">Team Beta · React 18</div>
+        <div style="color:#555; font-size:0.7em; margin-top:8px; font-family:monospace;">orders.company.com<br/>remoteEntry.js</div>
+      </div>
+      <div style="border:2px solid rgba(247,223,30,0.5); border-radius:10px; padding:14px; text-align:center; background:rgba(247,223,30,0.04);">
+        <div style="color:var(--accent2); font-weight:bold; font-size:0.85em;">MFE: Admin</div>
+        <div style="color:#aaa; font-size:0.78em; margin-top:4px;">Team Gamma · Vue 3</div>
+        <div style="color:#555; font-size:0.7em; margin-top:8px; font-family:monospace;">admin.company.com<br/>remoteEntry.js</div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:12px; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; font-size:0.75em; text-align:center; color:#888;">
+      <div>⚡ Each deployed independently</div>
+      <div>📦 Own repo &amp; CI/CD pipeline</div>
+      <div>🔗 Linked via Module Federation</div>
+    </div>
+  </div>
+  <div class="analogy">Shell = API Gateway. MFEs = Microservices. Each team ships on their own schedule — the shell just stitches them together.</div>
+</section>
+
+<section>
+  <h3>Webpack &amp; Module Federation</h3>
+  <div class="two-col" style="align-items:start; margin-bottom:14px;">
+    <div>
+      <p style="color:var(--accent); font-weight:bold; margin-bottom:8px;">🔧 What is Webpack?</p>
+      <div class="card" style="font-size:0.83em;">
+        A <strong>module bundler</strong> — takes JS, CSS, images and produces optimised bundles the browser can load.<br/><br/>
+        <span style="color:#aaa;">Vite (esbuild/Rollup), CRA, and Next.js all bundle under the hood. Webpack is the most configurable — and the one that enables Module Federation.</span>
+      </div>
+    </div>
+    <div>
+      <p style="color:var(--accent2); font-weight:bold; margin-bottom:8px;">🔗 What is Module Federation?</p>
+      <div class="card" style="font-size:0.83em;">
+        A <strong>Webpack 5 plugin</strong> that lets one app <em>expose</em> components and another app <em>consume</em> them <em>at runtime</em> — no npm install, no rebuild.<br/><br/>
+        <span style="color:#aaa;">The standard technology behind most production Micro Frontend setups today.</span>
+      </div>
+    </div>
+  </div>
+  <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:12px 18px; font-size:0.82em; color:#ccc;">
+    <strong style="color:var(--accent);">Two apps. Two repos. Two deploys.</strong><br/>
+    Remote exposes a component at <code class="inline">cart.company.com/remoteEntry.js</code><br/>
+    Host loads it live — without knowing about it at build time.
+  </div>
+</section>
+
+<section>
+  <h3>Module Federation — Config</h3>
+  <div class="two-col" style="font-size:0.8em; align-items:start;">
+    <div>
+      <p style="color:var(--accent); margin-bottom:6px; font-weight:bold;">🐚 Host (Shell) <code class="inline">webpack.config.js</code></p>
+      <pre style="margin:0 !important;"><code class="language-js" data-trim>
+const { ModuleFederationPlugin } =
+  require("webpack").container
+
+module.exports = {
+  plugins: [
+    new ModuleFederationPlugin({
+      name: "shell",
+      remotes: {
+        cart:
+          "cart@https://cart.company.com"
+          + "/remoteEntry.js",
+        orders:
+          "orders@https://orders.company.com"
+          + "/remoteEntry.js",
+      },
+      shared: {
+        react:       { singleton: true },
+        "react-dom": { singleton: true },
+      },
+    }),
+  ],
+}
+      </code></pre>
+    </div>
+    <div>
+      <p style="color:var(--accent2); margin-bottom:6px; font-weight:bold;">📦 Remote (Cart) <code class="inline">webpack.config.js</code></p>
+      <pre style="margin:0 !important;"><code class="language-js" data-trim>
+const { ModuleFederationPlugin } =
+  require("webpack").container
+
+module.exports = {
+  plugins: [
+    new ModuleFederationPlugin({
+      name: "cart",
+      filename: "remoteEntry.js",
+      exposes: {
+        "./Cart":    "./src/Cart",
+        "./CartBtn": "./src/CartButton",
+      },
+      shared: {
+        react:       { singleton: true },
+        "react-dom": { singleton: true },
+      },
+    }),
+  ],
+}
+      </code></pre>
+    </div>
+  </div>
+  <p class="muted" style="font-size:0.78em; margin-top:8px;"><code class="inline">singleton: true</code> — ensures only one copy of React is loaded even when multiple MFEs share it (prevents React hook errors).</p>
+</section>
+
+<section>
+  <h3>Module Federation — Using a Remote in the Host</h3>
+  <pre><code class="language-jsx" data-trim>
+// Host app — imports Cart from the remote AT RUNTIME
+// "cart/Cart" → resolves via cart@remoteEntry.js → exposes["./Cart"]
+const CartApp   = React.lazy(() =&gt; import("cart/Cart"))
+const OrdersApp = React.lazy(() =&gt; import("orders/OrderList"))
+
+function App() {
+  return (
+    &lt;BrowserRouter&gt;
+      &lt;Routes&gt;
+        &lt;Route path="/" element={&lt;Home /&gt;} /&gt;
+
+        {/* Cart lives at cart.company.com — loaded at runtime */}
+        &lt;Route path="/cart" element={
+          &lt;React.Suspense fallback="Loading cart..."&gt;
+            &lt;CartApp /&gt;
+          &lt;/React.Suspense&gt;
+        } /&gt;
+
+        {/* Orders lives at orders.company.com */}
+        &lt;Route path="/orders" element={
+          &lt;React.Suspense fallback="Loading orders..."&gt;
+            &lt;OrdersApp /&gt;
+          &lt;/React.Suspense&gt;
+        } /&gt;
+      &lt;/Routes&gt;
+    &lt;/BrowserRouter&gt;
+  )
+}
+  </code></pre>
+  <div class="analogy">Like an HTTP call to a microservice — the shell fetches the Cart code at runtime, not at build time.</div>
+</section>
+
+<section>
+  <h3>Monolith vs Micro Frontend — When to Choose</h3>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; text-align:left; font-size:0.84em; margin-top:10px;">
+    <div style="background:rgba(97,218,251,0.05); border:2px solid rgba(97,218,251,0.4); border-radius:12px; padding:18px;">
+      <p style="color:var(--accent); font-weight:bold; margin:0 0 10px; font-size:1em;">🏢 Monolith</p>
+      <div style="color:#ccc; line-height:2;">
+        ✅ Team of 1–10 engineers<br/>
+        ✅ Single product, single domain<br/>
+        ✅ Fast iteration &amp; prototyping<br/>
+        ✅ Shared design system is central<br/>
+        ❌ 10+ teams with conflicting timelines<br/>
+        ❌ Teams that need independent deploys
+      </div>
+    </div>
+    <div style="background:rgba(247,223,30,0.04); border:2px solid rgba(247,223,30,0.4); border-radius:12px; padding:18px;">
+      <p style="color:var(--accent2); font-weight:bold; margin:0 0 10px; font-size:1em;">🧩 Micro Frontend</p>
+      <div style="color:#ccc; line-height:2;">
+        ✅ 5+ teams, different release cadences<br/>
+        ✅ Portal-style apps (HR, ERP, CRM, Procurement)<br/>
+        ✅ Need different tech stacks per domain<br/>
+        ✅ Independent scalability &amp; fault isolation<br/>
+        ❌ Small team — huge operational overhead<br/>
+        ❌ Greenfield / MVP — premature complexity
+      </div>
+    </div>
+  </div>
+  <div class="analogy">Enterprise portals (SAP Fiori, Salesforce, internal EJOT tools) are classic MFE candidates — many teams, many domains, one UI shell.</div>
+</section>
+
+<section>
+  <h3>Rendering Strategies</h3>
+  <p style="color:#aaa; font-size:0.85em; margin-bottom:16px;">The same React component tree can be delivered in three fundamentally different ways — each with different tradeoffs.</p>
+  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px; font-size:0.84em;">
+    <div class="card" style="border-color:rgba(97,218,251,0.5); text-align:center; padding:20px 14px;">
+      <div style="font-size:2.2em; margin-bottom:10px;">🖥️</div>
+      <strong style="color:var(--accent); display:block; font-size:1.1em; margin-bottom:6px;">CSR</strong>
+      <strong style="display:block; margin-bottom:10px;">Client-Side Rendering</strong>
+      <p style="color:#aaa; margin:0;">Browser downloads JS — React renders the whole app <em>in the browser</em></p>
+      <p style="color:#555; font-size:0.85em; margin-top:8px;">Vite · Create React App</p>
+    </div>
+    <div class="card" style="border-color:rgba(247,223,30,0.5); text-align:center; padding:20px 14px;">
+      <div style="font-size:2.2em; margin-bottom:10px;">⚡</div>
+      <strong style="color:var(--accent2); display:block; font-size:1.1em; margin-bottom:6px;">SSR</strong>
+      <strong style="display:block; margin-bottom:10px;">Server-Side Rendering</strong>
+      <p style="color:#aaa; margin:0;">Server fetches data &amp; generates HTML — browser gets a full page instantly</p>
+      <p style="color:#555; font-size:0.85em; margin-top:8px;">Next.js · Remix</p>
+    </div>
+    <div class="card" style="border-color:rgba(100,255,150,0.5); text-align:center; padding:20px 14px;">
+      <div style="font-size:2.2em; margin-bottom:10px;">📄</div>
+      <strong style="color:#64ff96; display:block; font-size:1.1em; margin-bottom:6px;">SSG</strong>
+      <strong style="display:block; margin-bottom:10px;">Static Site Generation</strong>
+      <p style="color:#aaa; margin:0;">HTML generated at <em>build time</em> — served from CDN, no server needed at runtime</p>
+      <p style="color:#555; font-size:0.85em; margin-top:8px;">Next.js · Astro · Gatsby</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>Client-Side Rendering (CSR)</h3>
+  <div style="display:flex; justify-content:center; align-items:center; gap:0; margin:14px 0; font-size:0.78em; flex-wrap:wrap;">
+    <div style="background:rgba(97,218,251,0.1); border:1px solid var(--accent); border-radius:8px; padding:10px 14px; text-align:center; min-width:110px;">
+      <div style="font-size:1.3em;">🌐</div><div style="font-weight:bold;">Browser</div><div style="color:#aaa; font-size:0.9em;">GET /page</div>
+    </div>
+    <div style="color:var(--accent); font-size:2em; padding:0 8px;">→</div>
+    <div style="background:rgba(255,255,255,0.04); border:1px solid #555; border-radius:8px; padding:10px 14px; text-align:center; min-width:110px;">
+      <div style="font-size:1.3em;">🖥️</div><div style="font-weight:bold;">CDN / Server</div><div style="color:#aaa; font-size:0.9em;">Empty HTML + bundle.js</div>
+    </div>
+    <div style="color:var(--accent); font-size:2em; padding:0 8px;">→</div>
+    <div style="background:rgba(97,218,251,0.08); border:1px solid var(--accent); border-radius:8px; padding:10px 14px; text-align:center; min-width:110px;">
+      <div style="font-size:1.3em;">⚙️</div><div style="font-weight:bold;">Browser</div><div style="color:#aaa; font-size:0.9em;">Downloads &amp; runs React</div>
+    </div>
+    <div style="color:var(--accent); font-size:2em; padding:0 8px;">→</div>
+    <div style="background:rgba(97,218,251,0.15); border:1px solid var(--accent); border-radius:8px; padding:10px 14px; text-align:center; min-width:110px;">
+      <div style="font-size:1.3em;">✅</div><div style="font-weight:bold;">UI Visible</div><div style="color:#aaa; font-size:0.9em;">After JS executes</div>
+    </div>
+  </div>
+  <div class="two-col" style="font-size:0.83em; margin-top:6px; align-items:start;">
+    <div>
+      <p style="color:var(--accent); font-weight:bold; margin-bottom:6px;">✅ Use CSR when:</p>
+      <ul>
+        <li>Internal dashboards &amp; admin portals</li>
+        <li>Heavy interactivity (drag, real-time updates)</li>
+        <li>SEO is irrelevant (login-gated apps)</li>
+        <li>Simplest deploy — just push to a CDN</li>
+      </ul>
+    </div>
+    <div>
+      <p style="color:#ff6b6b; font-weight:bold; margin-bottom:6px;">❌ Avoid CSR when:</p>
+      <ul>
+        <li>Public marketing or product pages</li>
+        <li>SEO &amp; social sharing previews matter</li>
+        <li>Slow networks / low-power devices</li>
+        <li>Time-to-first-contentful-paint is critical</li>
+      </ul>
+    </div>
+  </div>
+  <p class="muted" style="font-size:0.78em; margin-top:8px;">📦 <strong>Vite + React</strong> = pure CSR by default. Perfect for internal portals, dashboards, admin tools.</p>
+</section>
+
+<section>
+  <h3>Server-Side Rendering (SSR)</h3>
+  <div style="display:flex; justify-content:center; align-items:center; gap:0; margin:14px 0; font-size:0.78em; flex-wrap:wrap;">
+    <div style="background:rgba(247,223,30,0.1); border:1px solid var(--accent2); border-radius:8px; padding:10px 14px; text-align:center; min-width:110px;">
+      <div style="font-size:1.3em;">🌐</div><div style="font-weight:bold;">Browser</div><div style="color:#aaa; font-size:0.9em;">GET /products/42</div>
+    </div>
+    <div style="color:var(--accent2); font-size:2em; padding:0 8px;">→</div>
+    <div style="background:rgba(247,223,30,0.07); border:1px solid var(--accent2); border-radius:8px; padding:10px 14px; text-align:center; min-width:110px;">
+      <div style="font-size:1.3em;">🖥️</div><div style="font-weight:bold;">Server</div><div style="color:#aaa; font-size:0.9em;">Fetches DB → renders HTML</div>
+    </div>
+    <div style="color:var(--accent2); font-size:2em; padding:0 8px;">→</div>
+    <div style="background:rgba(247,223,30,0.1); border:1px solid var(--accent2); border-radius:8px; padding:10px 14px; text-align:center; min-width:110px;">
+      <div style="font-size:1.3em;">📄</div><div style="font-weight:bold;">Browser</div><div style="color:#aaa; font-size:0.9em;">Full HTML — visible instantly</div>
+    </div>
+    <div style="color:var(--accent2); font-size:2em; padding:0 8px;">→</div>
+    <div style="background:rgba(247,223,30,0.1); border:1px solid var(--accent2); border-radius:8px; padding:10px 14px; text-align:center; min-width:110px;">
+      <div style="font-size:1.3em;">💧</div><div style="font-weight:bold;">Hydration</div><div style="color:#aaa; font-size:0.9em;">React attaches events</div>
+    </div>
+  </div>
+  <div class="two-col" style="font-size:0.83em; margin-top:6px; align-items:start;">
+    <div>
+      <p style="color:var(--accent2); font-weight:bold; margin-bottom:6px;">✅ Use SSR when:</p>
+      <ul>
+        <li>Public-facing pages where SEO is critical</li>
+        <li>Fast first paint for e-commerce / news</li>
+        <li>Social sharing (Open Graph previews)</li>
+        <li>Personalised content per user request</li>
+      </ul>
+    </div>
+    <div>
+      <p style="color:#ff6b6b; font-weight:bold; margin-bottom:6px;">❌ Avoid SSR when:</p>
+      <ul>
+        <li>Internal tools with no SEO requirements</li>
+        <li>High traffic with no caching strategy</li>
+        <li>Team not ready for Node.js server infra</li>
+      </ul>
+    </div>
+  </div>
+  <p class="muted" style="font-size:0.78em; margin-top:8px;">⚡ <strong>Next.js</strong> = SSR/SSG out of the box. Each page can choose its own rendering mode independently.</p>
+</section>
+
+<section>
+  <h3>CSR vs SSR vs SSG — Full Comparison</h3>
+  <div style="font-size:0.8em; margin-top:10px;">
+    <table style="width:100%; border-collapse:collapse; text-align:left;">
+      <thead>
+        <tr style="border-bottom:2px solid rgba(97,218,251,0.4);">
+          <th style="padding:8px 12px; color:var(--accent);">Feature</th>
+          <th style="padding:8px 12px; color:var(--accent);">🖥️ CSR</th>
+          <th style="padding:8px 12px; color:var(--accent2);">⚡ SSR</th>
+          <th style="padding:8px 12px; color:#64ff96;">📄 SSG</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.07); background:rgba(255,255,255,0.02);">
+          <td style="padding:8px 12px; color:#ccc;">First Load Speed</td>
+          <td style="padding:8px 12px; color:#ff6b6b;">Slow (wait for JS)</td>
+          <td style="padding:8px 12px; color:#64ff96;">Fast (full HTML)</td>
+          <td style="padding:8px 12px; color:#64ff96;">Fastest (CDN cached)</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.07);">
+          <td style="padding:8px 12px; color:#ccc;">SEO</td>
+          <td style="padding:8px 12px; color:#ff6b6b;">Poor (needs JS to run)</td>
+          <td style="padding:8px 12px; color:#64ff96;">Excellent</td>
+          <td style="padding:8px 12px; color:#64ff96;">Excellent</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.07); background:rgba(255,255,255,0.02);">
+          <td style="padding:8px 12px; color:#ccc;">Interactivity</td>
+          <td style="padding:8px 12px; color:#64ff96;">Excellent (SPA)</td>
+          <td style="padding:8px 12px; color:#64ff96;">Good (after hydration)</td>
+          <td style="padding:8px 12px; color:#aaa;">Good (after hydration)</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.07);">
+          <td style="padding:8px 12px; color:#ccc;">Dynamic Data</td>
+          <td style="padding:8px 12px; color:#64ff96;">Yes (API calls)</td>
+          <td style="padding:8px 12px; color:#64ff96;">Yes (server fetches per request)</td>
+          <td style="padding:8px 12px; color:#ff6b6b;">No (data frozen at build)</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.07); background:rgba(255,255,255,0.02);">
+          <td style="padding:8px 12px; color:#ccc;">Server Required?</td>
+          <td style="padding:8px 12px; color:#64ff96;">No (CDN only)</td>
+          <td style="padding:8px 12px; color:#ff6b6b;">Yes (Node.js server)</td>
+          <td style="padding:8px 12px; color:#64ff96;">No (CDN only)</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.07);">
+          <td style="padding:8px 12px; color:#ccc;">Best For</td>
+          <td style="padding:8px 12px; color:#aaa;">Dashboards, portals</td>
+          <td style="padding:8px 12px; color:#aaa;">E-commerce, news feeds</td>
+          <td style="padding:8px 12px; color:#aaa;">Docs, blogs, landing pages</td>
+        </tr>
+        <tr>
+          <td style="padding:8px 12px; color:#ccc;">Key Frameworks</td>
+          <td style="padding:8px 12px; color:#aaa;">Vite, CRA</td>
+          <td style="padding:8px 12px; color:#aaa;">Next.js, Remix</td>
+          <td style="padding:8px 12px; color:#aaa;">Next.js, Astro, Gatsby</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h3>Real-World: Which Approach?</h3>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; text-align:left; font-size:0.84em; margin-top:10px;">
+    <div class="card" style="border-color:rgba(97,218,251,0.45);">
+      <strong style="color:var(--accent);">🏭 Company Internal Portal</strong><br/>
+      <span style="color:#aaa; font-size:0.9em;">Login-gated · Multiple teams · Complex interactions</span><br/>
+      <span style="color:#64ff96; display:block; margin-top:8px;">→ CSR (Vite + React) + Micro Frontends</span>
+    </div>
+    <div class="card" style="border-color:rgba(247,223,30,0.45);">
+      <strong style="color:var(--accent2);">🛒 E-commerce Product Page</strong><br/>
+      <span style="color:#aaa; font-size:0.9em;">SEO critical · Fast first paint · Dynamic prices</span><br/>
+      <span style="color:#64ff96; display:block; margin-top:8px;">→ SSR with Next.js</span>
+    </div>
+    <div class="card" style="border-color:rgba(100,255,150,0.45);">
+      <strong style="color:#64ff96;">📖 Developer Documentation</strong><br/>
+      <span style="color:#aaa; font-size:0.9em;">Content rarely changes · Great SEO needed</span><br/>
+      <span style="color:#64ff96; display:block; margin-top:8px;">→ SSG with Astro or Next.js static export</span>
+    </div>
+    <div class="card" style="border-color:rgba(97,218,251,0.45);">
+      <strong style="color:var(--accent);">📊 Analytics Dashboard</strong><br/>
+      <span style="color:#aaa; font-size:0.9em;">Real-time data · No SEO · Always changing</span><br/>
+      <span style="color:#64ff96; display:block; margin-top:8px;">→ CSR (Vite) + React Query</span>
+    </div>
+  </div>
+  <div class="analogy">CSR = frontend calls REST API directly. SSR = BFF pattern — server fetches data &amp; renders HTML together before sending to client.</div>
+</section>
+
+<!-- ===================== DAY 10 CHALLENGE ===================== -->
+<section data-background-color="#0a0a0a">
+  <div class="challenge-badge">🎯 DAY 10 — ARCHITECTURE DECISIONS</div>
+  <h3>Pick the Right Strategy</h3>
+  <p class="muted">For each scenario, pick: Monolith vs MFE &nbsp;+&nbsp; CSR vs SSR vs SSG</p>
+  <div style="text-align:left; font-size:0.88em;">
+    <div class="card">1. A <strong>company portal</strong> — HR, Finance &amp; Procurement each owned by separate teams needing independent deploys</div>
+    <div class="card">2. A <strong>marketing landing page</strong> for a product launch — SEO critical, content rarely changes</div>
+    <div class="card">3. An <strong>internal task manager</strong> — 3 devs, login-gated, needs fast iteration</div>
+    <div class="card">4. A <strong>news website</strong> — thousands of articles, fully public, must rank on Google</div>
+    <div class="card">5. You want the Cart page deployed by a different team <em>without</em> rebuilding the whole app — what technology enables this?</div>
+  </div>
+  <div class="challenge-tip">💬 1) MFE + CSR &nbsp;|&nbsp; 2) SSG (Next.js/Astro) &nbsp;|&nbsp; 3) Monolith + CSR &nbsp;|&nbsp; 4) SSR (Next.js) &nbsp;|&nbsp; 5) Webpack Module Federation</div>
+</section>
+
 <!-- ===================== WRAP UP ===================== -->
 <section data-background-gradient="linear-gradient(135deg, #0f0c29, #302b63, #24243e)">
   <h2>What You Now Know</h2>
@@ -2735,13 +3266,14 @@ function CreateUser() {
       <div class="card">✅ How the browser and DOM work</div>
       <div class="card">✅ Modern ES6+ patterns you’ll read daily</div>
       <div class="card">✅ React components, props, and state</div>
+      <div class="card">✅ Data fetching, project structure</div>
     </div>
     <div>
-      <div class="card">✅ Data fetching, project structure</div>
       <div class="card">✅ Hooks deep dive, error handling &amp; browser storage</div>
       <div class="card">✅ TypeScript + Tailwind CSS</div>
       <div class="card">✅ React Router — navigation, protected/public routes, query params</div>
       <div class="card">✅ React Query — server state, caching, mutations</div>
+      <div class="card" style="border-color:rgba(97,218,251,0.6); background:rgba(97,218,251,0.05);">✅ Frontend Architecture — Monolith, Micro Frontends, Webpack Module Federation, CSR/SSR/SSG</div>
     </div>
   </div>
 </section>
@@ -2767,6 +3299,8 @@ function CreateUser() {
     <span class="tag">Tailwind</span>
     <span class="tag">React Query</span>
     <span class="tag">React Router</span>
+    <span class="tag">Microfrontends</span>
+    <span class="tag">SSR / CSR</span>
   </div>
 </section>
 
